@@ -1,1107 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>Radiant Road Music · Progress Tracker</title>
-    <style>
-        :root {
-            --bg: #0f0f15;
-            --card: #1a1a26;
-            --card-hover: #1f1f2e;
-            --accent: #7c5cfc;
-            --accent-glow: #9b83ff;
-            --accent-soft: rgba(124, 92, 252, 0.15);
-            --accent-medium: rgba(124, 92, 252, 0.30);
-            --text: #e8e8f2;
-            --text-secondary: #b0b0c0;
-            --text-muted: #6b6b80;
-            --success: #4ade80;
-            --success-soft: rgba(74, 222, 128, 0.15);
-            --danger: #f87171;
-            --danger-soft: rgba(248, 113, 113, 0.12);
-            --warning: #fbbf24;
-            --warning-soft: rgba(251, 191, 36, 0.15);
-            --radius: 18px;
-            --radius-sm: 12px;
-            --radius-xs: 8px;
-            --nav-height: 70px;
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-            padding: 0 8px;
-        }
-        .app {
-            width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
-            padding: 12px 16px calc(var(--nav-height) + var(--safe-bottom) + 8px);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        /* ── Brand Header ── */
-        .brand-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 4px 4px 8px;
-            margin-bottom: 2px;
-        }
-        .brand-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #7c5cfc, #a78bfa);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 16px rgba(124, 92, 252, 0.35);
-            flex-shrink: 0;
-        }
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-        .brand-name {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: -0.3px;
-            color: var(--text);
-        }
-        .brand-sub {
-            font-size: 0.72rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: var(--accent-glow);
-        }
-        /* ── End Brand Header ── */
-
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 4px 12px;
-        }
-        .top-nav h1 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-        .streak-pill {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--accent-soft);
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent-glow);
-        }
-        .card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .card-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border-radius: 28px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-            width: 100%;
-            max-width: none;
-            box-shadow: 0 4px 20px rgba(124, 92, 252, 0.3);
-        }
-        .btn-primary:active {
-            transform: scale(0.97);
-            background: var(--accent-glow);
-        }
-        .btn-secondary {
-            background: var(--card);
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 100%;
-        }
-        .btn-secondary:active {
-            background: var(--card-hover);
-        }
-        .btn-sm {
-            padding: 10px 18px;
-            font-size: 0.85rem;
-            border-radius: 20px;
-        }
-        .btn-ghost {
-            background: transparent;
-            color: var(--accent-glow);
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-        .btn-outline {
-            background: transparent;
-            color: var(--accent-glow);
-            border: 1px solid var(--accent-medium);
-            width: 100%;
-        }
-        .btn-outline:active {
-            background: var(--accent-soft);
-        }
-        .checkin-prompt {
-            text-align: center;
-            padding: 26px 20px;
-        }
-        .checkin-prompt .time-badge {
-            display: inline-block;
-            background: var(--accent-soft);
-            color: var(--accent-glow);
-            padding: 5px 13px;
-            border-radius: 14px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-        .checkin-prompt h2 {
-            font-size: 1.25rem;
-            margin-bottom: 6px;
-        }
-        .checkin-prompt p {
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            margin-bottom: 20px;
-        }
-        .rating-section {
-            text-align: center;
-            padding: 8px 0;
-        }
-        .rating-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-secondary);
-        }
-        .rating-big {
-            font-size: 4rem;
-            font-weight: 800;
-            height: 80px;
-            line-height: 80px;
-            color: var(--accent-glow);
-            transition: color 0.2s;
-        }
-        .rating-context {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-        .slider-container {
-            padding: 0 8px;
-        }
-        .slider-container input[type="range"] {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: linear-gradient(to right, #4ade80, #a3e635, #fbbf24, #f97316, #f87171);
-            outline: none;
-        }
-        .slider-container input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #fff;
-            border: 3px solid var(--accent);
-            cursor: pointer;
-            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
-        }
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
-        .result-card {
-            text-align: center;
-            padding: 28px 20px;
-        }
-        .result-delta {
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin: 8px 0;
-        }
-        .result-delta.reduced {
-            color: var(--success);
-        }
-        .result-delta.neutral {
-            color: var(--text-muted);
-        }
-        .result-msg {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            line-height: 1.5;
-        }
-        .result-before-after {
-            display: flex;
-            justify-content: center;
-            gap: 28px;
-            margin: 16px 0;
-        }
-        .ra-col {
-            text-align: center;
-        }
-        .ra-val {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        .ra-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-        .ra-arrow {
-            font-size: 1.4rem;
-            color: var(--text-muted);
-            align-self: center;
-        }
-        .input-field {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-sm);
-            padding: 14px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 0.88rem;
-            transition: border-color 0.2s;
-        }
-        .input-field::placeholder {
-            color: var(--text-muted);
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        /* ── Auto-expanding comment area ── */
-        .comment-area {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-sm);
-            padding: 14px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 0.88rem;
-            resize: none;
-            overflow: hidden;
-            min-height: 80px;
-            transition: border-color 0.2s;
-            line-height: 1.5;
-        }
-        .comment-area::placeholder {
-            color: var(--text-muted);
-        }
-        .comment-area:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        .pill-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .pill {
-            padding: 10px 18px;
-            border-radius: 22px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.15s;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .pill:active {
-            transform: scale(0.96);
-        }
-        .pill.selected {
-            background: var(--accent-soft);
-            border-color: var(--accent-medium);
-            color: var(--accent-glow);
-        }
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .stat-card {
-            background: var(--card);
-            border-radius: var(--radius-sm);
-            padding: 16px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .stat-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-top: 4px;
-            letter-spacing: 0.5px;
-        }
-        .stat-sub {
-            font-size: 0.72rem;
-            color: var(--accent-glow);
-            margin-top: 2px;
-        }
-        .chart-container {
-            margin-top: 4px;
-        }
-        .chart-bar-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-        .chart-date {
-            width: 42px;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            text-align: right;
-            flex-shrink: 0;
-        }
-        .chart-bar-wrap {
-            flex: 1;
-            height: 22px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-        }
-        .chart-bar-fill {
-            height: 100%;
-            border-radius: 6px;
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            padding-left: 8px;
-        }
-        .chart-bar-fill.good {
-            background: linear-gradient(90deg, #4ade80, #22c55e);
-        }
-        .chart-bar-fill.ok {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-        }
-        .chart-bar-fill.low {
-            background: linear-gradient(90deg, #f87171, #ef4444);
-        }
-        .chart-bar-num {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: rgba(0, 0, 0, 0.55);
-        }
-        .weekly-card {
-            background: var(--accent-soft);
-            border: 1px solid var(--accent-medium);
-            border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-        .weekly-card .msg {
-            font-size: 0.88rem;
-            color: var(--accent-glow);
-            font-weight: 600;
-        }
-        .reminder-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            margin-top: 14px;
-            text-align: center;
-        }
-        .reminder-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 32px 20px;
-            color: var(--text-muted);
-        }
-        .empty-state .icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-        }
-        .empty-state p {
-            font-size: 0.88rem;
-        }
-        .history-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            background: var(--card);
-            border-radius: var(--radius-sm);
-            margin-bottom: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .history-time {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            min-width: 52px;
-        }
-        .history-scores {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-        }
-        .history-score {
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
-        .history-arrow {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-        }
-        .history-delta {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 10px;
-        }
-        .history-delta.pos {
-            color: var(--success);
-            background: var(--success-soft);
-        }
-        .history-delta.neg {
-            color: var(--danger);
-            background: var(--danger-soft);
-        }
-        .history-delta.zero {
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .history-notes {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-left: auto;
-            max-width: 90px;
-            text-align: right;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .toast {
-            position: fixed;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 200;
-            background: var(--success);
-            color: #000;
-            padding: 10px 22px;
-            border-radius: 22px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 4px 20px rgba(74, 222, 128, 0.4);
-            animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
-        }
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-        @keyframes toastOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
-        }
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 440px;
-            background: rgba(15, 15, 21, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: var(--nav-height);
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: var(--safe-bottom);
-            z-index: 100;
-        }
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            padding: 8px 14px;
-            transition: color 0.2s;
-            font-family: inherit;
-        }
-        .nav-btn.active {
-            color: var(--accent-glow);
-        }
-        .nav-btn svg {
-            width: 22px;
-            height: 22px;
-        }
-        .spacer {
-            flex: 1;
-        }
-        .fade-in {
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .scroll-area {
-            max-height: 340px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mt-12 {
-            margin-top: 12px;
-        }
-        .step-indicator {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-        }
-        /* ── Desktop gap fix: remove large spacer ── */
-        .home-content {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        /* Smaller gap on the home screen checkin card */
-        .checkin-prompt.compact {
-            padding: 18px 20px;
-        }
-        @media (min-width: 500px) {
-            .app {
-                padding-top: 16px;
-            }
-            .brand-header {
-                padding-bottom: 6px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Radiant Road Music · Progress Tracker</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#0f0f15;color:#e8e8f2;display:flex;justify-content:center;padding:0 8px;min-height:100vh}
+.app{width:100%;max-width:440px;min-height:100vh;padding:12px 16px 90px;display:flex;flex-direction:column;gap:8px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 4px 8px}
+.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#7c5cfc,#a78bfa);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;box-shadow:0 4px 16px rgba(124,92,252,0.35)}
+.brand-name{font-size:1.2rem;font-weight:800;letter-spacing:-0.3px}
+.brand-sub{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#9b83ff}
+.top-nav{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 8px}
+.top-nav h1{font-size:1.35rem;font-weight:700}
+.streak{display:flex;align-items:center;gap:6px;background:rgba(124,92,252,0.15);padding:7px 14px;border-radius:20px;font-size:0.85rem;font-weight:600;color:#9b83ff}
+.card{background:#1a1a26;border-radius:18px;padding:20px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.04)}
+.card-title{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.8px;color:#6b6b80;margin-bottom:12px;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;border-radius:28px;font-size:1rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:.2s;width:100%}
+.btn-primary{background:#7c5cfc;color:#fff;box-shadow:0 4px 20px rgba(124,92,252,0.3)}
+.btn-primary:active{background:#9b83ff;transform:scale(0.97)}
+.btn-ghost{background:transparent;color:#9b83ff;padding:8px 12px;font-size:0.85rem;width:auto}
+.pill{padding:10px 18px;border-radius:22px;font-size:0.85rem;font-weight:600;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#b0b0c0;cursor:pointer;font-family:inherit;transition:.15s}
+.pill.selected{background:rgba(124,92,252,0.15);border-color:rgba(124,92,252,0.3);color:#9b83ff}
+.pill-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.input-field,.comment-area{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;color:#e8e8f2;font-family:inherit;font-size:0.88rem;transition:border-color .2s}
+.input-field:focus,.comment-area:focus{outline:none;border-color:#7c5cfc}
+.comment-area{resize:none;overflow:hidden;min-height:80px;line-height:1.5}
+.slider-container{padding:0 8px}
+.slider-container input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:4px;background:linear-gradient(90deg,#4ade80,#a3e635,#fbbf24,#f97316,#f87171);outline:none}
+.slider-container input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:38px;height:38px;border-radius:50%;background:#fff;border:3px solid #7c5cfc;cursor:pointer;box-shadow:0 2px 14px rgba(0,0,0,0.35)}
+.rating-big{font-size:4rem;font-weight:800;height:80px;line-height:80px;color:#9b83ff;text-align:center}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{background:#1a1a26;border-radius:12px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,0.04)}
+.stat-value{font-size:1.5rem;font-weight:700}
+.stat-label{font-size:0.7rem;text-transform:uppercase;color:#6b6b80;margin-top:4px;letter-spacing:.5px}
+.stat-sub{font-size:0.72rem;color:#9b83ff;margin-top:2px}
+.prompt{text-align:center;padding:26px 20px}
+.fade-in{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.mt-8{margin-top:8px}
+.text-muted{color:#6b6b80}
+.text-sm{font-size:0.78rem}
+.text-center{text-align:center}
+.flex{display:flex}
+.gap-2{gap:8px}
+.w-full{width:100%}
+</style>
 </head>
 <body>
-    <div class="app" id="app"></div>
+<div class="app" id="app"></div>
+<script>
+const KEY='nstrk_data';
+let D=JSON.parse(localStorage.getItem(KEY))||{checkins:[],streak:{current:0,lastDate:null,longest:0}};
+function save(){localStorage.setItem(KEY,JSON.stringify(D))}
+function ts(){return new Date().toISOString().split('T')[0]}
+function now(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:true})}
+function fmtFull(d){return new Date(d+'T00:00:00').toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})}
+function per(){const h=new Date().getHours();return h<12?'Morning':h<17?'Afternoon':'Evening'}
+function updStreak(t){
+  const s=D.streak;
+  if(!s.lastDate){s.current=1;s.longest=1;s.lastDate=t;return}
+  if(s.lastDate===t)return;
+  const d=Math.round((new Date(t+'T00:00:00')-new Date(s.lastDate+'T00:00:00'))/86400000);
+  if(d===1){s.current++;if(s.current>s.longest)s.longest=s.current}else if(d>1)s.current=1;
+  s.lastDate=t;
+}
+let screen='home',pen={};
 
-    <script>
-        // ── DATA ──
-        const STORAGE_KEY = 'nstrk_data';
-        let D = load();
+function r(s,d){screen=s;document.getElementById('app').innerHTML=render(s,d)}
 
-        function load() {
-            try { const r = localStorage.getItem(STORAGE_KEY); if (r) return JSON.parse(r); } catch (e) {}
-            return { checkins: [], streak: { current: 0, lastDate: null, longest: 0 } };
-        }
+function render(s,d){
+  const brand=`<div class="brand fade-in"><div class="brand-icon">🎵</div><div><div class="brand-name">Radiant Road Music</div><div class="brand-sub">Progress Tracker</div></div></div>`;
+  return brand+body(s,d);
+}
 
-        function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(D)); } catch (e) {} }
+function body(s,d){
+  switch(s){
+    case'home':return home();
+    case'before':return before();
+    case'after':return after();
+    case'notes':return notes(d);
+    case'result':return result(d);
+    case'dash':return dash();
+    case'hist':return hist();
+  }
+}
+function nav(a){return`<div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:rgba(15,15,21,0.92);backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;height:70px;border-top:1px solid rgba(255,255,255,0.06);z-index:100">${['home','dash','hist'].map(p=>`<button style="background:none;border:none;color:${a===p?'#9b83ff':'#6b6b80'};font-size:0.7rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px 14px;font-family:inherit" onclick="r('${p}')">${p==='home'?'🏠':p==='dash'?'📊':'📋'}<span>${p==='home'?'Home':p==='dash'?'Progress':'History'}</span></button>`).join('')}<button style="background:none;border:none;color:${a==='ci'?'#9b83ff':'#6b6b80'};font-size:0.7rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px 14px;font-family:inherit" onclick="start()">✍️<span>Check-in</span></button></div>`}
 
-        function ts() { return new Date().toISOString().split('T')[0]; }
-
-        function now() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }); }
-
-        function fmt(d) { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString([], { month: 'short', day: 'numeric' }); }
-
-        function fmtFull(d) { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }); }
-
-        function period() { const h = new Date().getHours(); return h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening'; }
-
-        function updStreak(today) {
-            const s = D.streak;
-            if (!s.lastDate) { s.current = 1;
-                s.longest = 1;
-                s.lastDate = today; return; }
-            if (s.lastDate === today) return;
-            const diff = Math.round((new Date(today + 'T00:00:00') - new Date(s.lastDate + 'T00:00:00')) / (86400000));
-            if (diff === 1) { s.current++; if (s.current > s.longest) s.longest = s.current; } else if (diff > 1) { s.current =
-                1; }
-            s.lastDate = today;
-        }
-
-        function weekRange() {
-            const n = new Date();
-            const day = n.getDay();
-            const start = new Date(n);
-            start.setDate(n.getDate() - day + (day === 0 ? -6 : 1));
-            const end = new Date(start);
-            end.setDate(end.getDate() + 6);
-            return { start: start.toISOString().split('T')[0], end: end.toISOString().split('T')[0] };
-        }
-
-        // ── STATE ──
-        let screen = 'home';
-        let pending = { before: null };
-
-        // ── BRAND HEADER (rendered separately so it appears on every screen) ──
-        function brandHeader() {
-            return `
-          <div class="brand-header fade-in">
-            <div class="brand-icon">🎵</div>
-            <div class="brand-text">
-              <div class="brand-name">Radiant Road Music</div>
-              <div class="brand-sub">Progress Tracker</div>
-            </div>
-          </div>
-        `;
-        }
-
-        // ── RENDER ──
-        function r(s, data) { screen = s;
-            document.getElementById('app').innerHTML = renderScreen(s, data); }
-
-        function renderScreen(s, d) {
-            // Prepend brand header to every screen
-            const body = renderBody(s, d);
-            return brandHeader() + body;
-        }
-
-        function renderBody(s, d) {
-            switch (s) {
-                case 'home':
-                    return homeUI();
-                case 'before':
-                    return beforeUI();
-                case 'after':
-                    return afterUI();
-                case 'notes':
-                    return notesUI(d);
-                case 'result':
-                    return resultUI(d);
-                case 'dashboard':
-                    return dashUI();
-                case 'history':
-                    return histUI();
-                default:
-                    return homeUI();
-            }
-        }
-
-        function nav(active) {
-            return `<div class="bottom-nav">
-          <button class="nav-btn ${active==='home'?'active':''}" onclick="r('home')">🏠<span>Home</span></button>
-          <button class="nav-btn ${active==='checkin'?'active':''}" onclick="start()">✍️<span>Check-in</span></button>
-          <button class="nav-btn ${active==='dashboard'?'active':''}" onclick="r('dashboard')">📊<span>Progress</span></button>
-          <button class="nav-btn ${active==='history'?'active':''}" onclick="r('history')">📋<span>History</span></button>
-        </div>`;
-        }
-
-        // ── HOME ──
-        function homeUI() {
-            const today = ts();
-            const s = D.streak;
-            const todayC = D.checkins.filter(c => c.date === today).length;
-            const emoji = period() === 'Morning' ? '🌅' : period() === 'Afternoon' ? '☀️' : '🌙';
-            return `
-          <div class="top-nav"><h1>Progress Tracker</h1><div class="streak-pill">🔥 ${s.current} day streak</div></div>
-          <div class="home-content">
-            <div class="card checkin-prompt compact fade-in">
-              <div class="time-badge">${emoji} ${period()} Check-in</div>
-              <h2>How are you feeling?</h2>
-              <p>Rate your stress before and after your session.</p>
-              <button class="btn btn-primary" onclick="start()">Start Check-in</button>
-              ${todayC>0?`<p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">${todayC} check-in${todayC>1?'s':''} today so far${todayC<2?' — aim for at least 2':''}</p>`:''}
-            </div>
-            <div class="reminder-card fade-in"><p>💡 Building lasting calm takes time. Small, consistent sessions build the foundation. Showing up is the win.</p></div>
-          </div>
-          ${nav('home')}`;
-        }
-
-        // ── BEFORE ──
-        function beforeUI() {
-            return `
-          <div class="top-nav">
-            <button class="btn btn-ghost btn-sm" onclick="r('home')">← Back</button>
-            <div class="spacer"></div><span class="step-indicator">Step 1 of 3</span>
-          </div>
-          <div class="card rating-section fade-in">
-            <div class="rating-label">How stressed / overwhelmed are you right now?</div>
-            <div class="rating-big" id="beforeVal">5</div>
-            <div class="slider-container">
-              <input type="range" min="1" max="10" value="5" id="beforeSlider" oninput="updRating('beforeVal',this.value)">
-            </div>
-            <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
-          </div>
-          <button class="btn btn-primary mt-8" onclick="doBefore()">Continue →</button>
-          ${nav('checkin')}`;
-        }
-
-        function updRating(id, v) { document.getElementById(id).textContent = v; }
-
-        // ── AFTER ──
-        function afterUI() {
-            return `
-          <div class="top-nav">
-            <button class="btn btn-ghost btn-sm" onclick="r('before')">← Back</button>
-            <div class="spacer"></div><span class="step-indicator">Step 2 of 3</span>
-          </div>
-          <div class="card" style="text-align:center;margin-bottom:8px;background:var(--accent-soft);border:1px solid var(--accent-medium);">
-            <span style="font-size:0.78rem;color:var(--accent-glow);">Your stress before: <strong>${pending.before}/10</strong></span>
-          </div>
-          <div class="card rating-section fade-in">
-            <div class="rating-label">After your session — how stressed are you now?</div>
-            <div class="rating-big" id="afterVal">3</div>
-            <div class="slider-container">
-              <input type="range" min="1" max="10" value="3" id="afterSlider" oninput="updRating('afterVal',this.value)">
-            </div>
-            <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
-          </div>
-          <button class="btn btn-primary mt-8" onclick="doAfter()">Continue →</button>
-          ${nav('checkin')}`;
-        }
-
-        // ── NOTES ──
-        function notesUI(d) {
-            pending.after = d.after;
-            return `
-          <div class="top-nav">
-            <button class="btn btn-ghost btn-sm" onclick="r('after')">← Back</button>
-            <div class="spacer"></div><span class="step-indicator">Step 3 of 3</span>
-          </div>
-          <div class="card fade-in">
-            <div class="card-title">Session Notes <span style="font-weight:400;text-transform:none;">(Optional, but highly beneficial)</span></div>
-            <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">What did you listen to?</label>
-            <input class="input-field" id="songInput" placeholder="e.g. I am Safe" style="margin-bottom:16px;">
-            <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Touch techniques used</label>
-            <div class="pill-group" id="touchGroup">
-              <button class="pill" data-touch="Hands" onclick="togglePill(this)">🙌 Hands</button>
-              <button class="pill" data-touch="Face" onclick="togglePill(this)">😌 Face</button>
-              <button class="pill" data-touch="Arms" onclick="togglePill(this)">💪 Arms</button>
-              <button class="pill" data-touch="All of the above" onclick="togglePill(this)">✨ All</button>
-            </div>
-            <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Any notes on how it felt?</label>
-            <textarea class="comment-area" id="commentInput" rows="3" placeholder="e.g. Felt tension release in my shoulders. Calmer than usual today." oninput="autoGrow(this)"></textarea>
-          </div>
-          <button class="btn btn-primary mt-8" onclick="doSave()">Save Check-in</button>
-          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="doSave()">Skip notes →</button>
-          ${nav('checkin')}`;
-        }
-
-        function togglePill(el) { el.classList.toggle('selected'); }
-
-        // ── Auto-grow textarea ──
-        function autoGrow(el) {
-            el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
-        }
-
-        // ── RESULT ──
-        function resultUI(d) {
-            const { before, after, id, song, touch, comment } = d;
-            const reduction = before - after;
-            const cls = reduction > 0 ? 'reduced' : 'neutral';
-            let msg, emojiIcon;
-            if (reduction >= 4) { msg =
-                    "Incredible! You reduced your stress by <strong>" + reduction +
-                    " points</strong>. That's a big shift — well done 😊";
-                emojiIcon = '🎉'; } else if (reduction >= 2) { msg = "Well done! You reduced your stress by <strong>" +
-                    reduction + " points</strong> 😊";
-                emojiIcon = '🙌'; } else if (reduction === 1) { msg =
-                    "Nice one! You reduced your stress by <strong>1 point</strong>. Every shift counts 😊";
-                emojiIcon = '👍'; } else if (reduction === 0) { msg =
-                    "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
-                emojiIcon = '💪'; } else { msg =
-                    "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
-                emojiIcon = '❤️'; }
-
-            return `
-          <div class="top-nav"><h1>Check-in Complete</h1><div class="spacer"></div></div>
-          <div class="card result-card fade-in">
-            <div style="font-size:3rem;margin-bottom:8px;">${emojiIcon}</div>
-            <div class="result-before-after">
-              <div class="ra-col"><div class="ra-val">${before}</div><div class="ra-label">Stress Before</div></div>
-              <div class="ra-arrow">→</div>
-              <div class="ra-col"><div class="ra-val">${after}</div><div class="ra-label">Stress After</div></div>
-            </div>
-            ${reduction > 0 ? `<div class="result-delta reduced">−${reduction} points</div>` : `<div class="result-delta neutral">—</div>`}
-            <div class="result-msg">${msg}</div>
-            ${song ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">🎵 ${song}</p>` : ''}
-            ${touch ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">🤲 ${touch}</p>` : ''}
-            ${comment ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">💬 ${comment}</p>` : ''}
-            <p style="font-size:0.7rem;color:var(--text-muted);margin-top:12px;">${fmtFull(ts())} · ${now()}</p>
-          </div>
-          <button class="btn btn-primary" onclick="r('dashboard')">See My Progress →</button>
-          <button class="btn btn-secondary mt-8" onclick="r('home')">Back to Home</button>
-          ${nav('home')}`;
-        }
-
-        // ── DASHBOARD ──
-        function dashUI() {
-            const today = ts();
-            const s = D.streak;
-            const all = D.checkins;
-            const todayC = all.filter(c => c.date === today).length;
-            const wk = weekRange();
-            const wkC = all.filter(c => c.date >= wk.start && c.date <= wk.end);
-            const wkReductions = wkC.filter(c => c.before > c.after);
-            const avgR = wkC.length > 0 ? (wkC.reduce((a, c) => a + (c.before - c.after), 0) / wkC.length).toFixed(1) : '—';
-            const total = all.length;
-
-            let wkMsg = '';
-            if (wkC.length >= 14) wkMsg =
-                '🎉 Amazing! You hit your 14 check-in target this week. Your nervous system thanks you!';
-            else if (wkC.length >= 10) wkMsg =
-                `💪 Great consistency! ${14-wkC.length} more check-ins to hit your weekly target.`;
-            else if (wkC.length >= 5) wkMsg =
-                `🌱 Building momentum — ${wkC.length} check-ins this week. Keep going, healing happens with repetition.`;
-            else if (wkC.length > 0) wkMsg = `🌱 Just getting started this week. Every check-in builds the habit.`;
-            else wkMsg = 'A new week begins. Aim for at least 2 check-ins a day — your nervous system will thank you.';
-
-            const last7 = [];
-            for (let i = 6; i >= 0; i--) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                const ds = d.toISOString().split('T')[0];
-                const dc = all.filter(c => c.date === ds);
-                const avg = dc.length > 0 ? (dc.reduce((a, c) => a + (c.before - c.after), 0) / dc.length).toFixed(1) : null;
-                last7.push({ date: ds, label: fmt(ds), avg, count: dc.length });
-            }
-
-            return `
-          <div class="top-nav">
-            <h1>Your Progress</h1>
-            <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📤 Export</button>
-            <button class="btn btn-ghost btn-sm" onclick="backupData()">💾 Backup</button>
-            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
-            <input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="restoreData(this)">
-          </div>
-          ${wkMsg ? `<div class="weekly-card fade-in"><div class="msg">${wkMsg}</div></div>` : ''}
-          <div class="stat-grid fade-in">
-            <div class="stat-card"><div class="stat-value">${s.current}</div><div class="stat-label">Day Streak</div><div class="stat-sub">Best: ${s.longest}</div></div>
-            <div class="stat-card"><div class="stat-value">${todayC}</div><div class="stat-label">Today</div><div class="stat-sub">${todayC>=2?'✅ Target hit':'Min target: 2'}</div></div>
-            <div class="stat-card"><div class="stat-value">${avgR}</div><div class="stat-label">Avg Reduction</div><div class="stat-sub">This week · ${wkC.length} entries</div></div>
-            <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Check-ins</div><div class="stat-sub">${wkReductions.length} showed improvement</div></div>
-          </div>
-          <div class="card fade-in mt-12">
-            <div class="card-title">Last 7 Days — Avg Stress Reduction</div>
-            <div class="chart-container">
-              ${last7.map(d=>{
-                if(d.avg===null) return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><span style="font-size:0.7rem;color:var(--text-muted);padding-left:8px;">No data</span></div></div>`;
-                const v=parseFloat(d.avg); const pct=Math.min(Math.abs(v)*10,100); const cls=v>=2?'good':v>=0?'ok':'low';
-                return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><div class="chart-bar-fill ${cls}" style="width:${pct}%"><span class="chart-bar-num">${v>0?'−'+v:v}</span></div></div><span style="font-size:0.7rem;color:var(--text-muted);">${d.count}</span></div>`;
-              }).join('')}
-            </div>
-          </div>
-          <div class="reminder-card fade-in"><p>💡 Building lasting calm is not linear. Some days you'll feel big shifts — other days, just showing up is the win. Trust the process and keep going.</p></div>
-          ${nav('dashboard')}`;
-        }
-
-        // ── HISTORY ──
-        function histUI() {
-            const list = [...D.checkins].reverse();
-            return `
-          <div class="top-nav">
-            <button class="btn btn-ghost btn-sm" onclick="r('dashboard')">← Dashboard</button>
-            <div class="spacer"></div><h1 style="font-size:1.1rem;">History</h1>
-          </div>
-          <div class="scroll-area fade-in">
-            ${list.length===0?`<div class="empty-state"><div class="icon">📋</div><p>No check-ins yet.<br>Start your first one from the home screen.</p></div>`:''}
-            ${list.map((c,i)=>{
-              const red=c.before-c.after; const dCls=red>0?'pos':red<0?'neg':'zero';
-              const dSign=red>0?'−':red<0?'+':''; const prev=list[i+1];
-              const notes = [c.song, c.touch, c.comment].filter(Boolean).join(' · ');
-              return `${(!prev||c.date!==prev.date)?`<div style="font-size:0.72rem;color:var(--text-muted);font-weight:600;padding:8px 4px 4px;text-transform:uppercase;letter-spacing:0.5px;">${fmtFull(c.date)}</div>`:''}
-              <div class="history-item fade-in">
-                <div class="history-time">${c.time}</div>
-                <div class="history-scores">
-                  <span class="history-score">${c.before}</span><span class="history-arrow">→</span><span class="history-score">${c.after}</span>
-                  <span class="history-delta ${dCls}">${red!==0?dSign+Math.abs(red):'0'}</span>
-                </div>
-                ${notes?`<span class="history-notes" title="${esc(notes)}">${notes}</span>`:''}
-              </div>`;
-            }).join('')}
-          </div>
-          ${nav('history')}`;
-        }
-
-        function esc(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
-
-        // ── EXPORT ──
-        function exportCSV() {
-            const rows = D.checkins.map(c => [
-                c.date, c.time, c.period, c.before, c.after, c.before - c.after,
-                `"${(c.song||'').replace(/"/g,'""')}"`,
-                `"${(c.touch||'').replace(/"/g,'""')}"`,
-                `"${(c.comment||'').replace(/"/g,'""')}"`
-            ].join(','));
-            const csv = 'Date,Time,Period,Before,After,Reduction,Song,Touch Techniques,Notes\n' + rows.join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'progress-data.csv';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('✅ CSV exported! Send this file to your coach.');
-        }
-
-        function showToast(msg) {
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.textContent = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2100);
-        }
-
-        function backupData() {
-            const blob = new Blob([JSON.stringify(D, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'progress-tracker-backup-' + ts() + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('💾 Backup saved! Keep this file safe.');
-        }
-
-        function restoreData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    if (!json.checkins || !json.streak) throw new Error('Invalid file');
-                    if (!confirm('Restore ' + json.checkins.length + ' check-ins and a ' + (json.streak.current || 0) +
-                            '-day streak? This replaces all current data.')) return;
-                    D = json;
-                    save();
-                    showToast('✅ Data restored!');
-                    r('dashboard');
-                } catch (err) {
-                    showToast('❌ Invalid backup file. Please try again.');
-                }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        // ── ACTIONS ──
-        function start() { pending = { before: null };
-            r('before'); }
-
-        function doBefore() { pending.before = parseInt(document.getElementById('beforeSlider').value);
-            r('after'); }
-
-        function doAfter() { const a = parseInt(document.getElementById('afterSlider').value);
-            r('notes', { after: a }); }
-
-        function doSave() {
-            const song = (document.getElementById('songInput')?.value || '').trim();
-            const touchPills = document.querySelectorAll('#touchGroup .pill.selected');
-            const touch = Array.from(touchPills).map(p => p.dataset.touch).join(', ');
-            const comment = (document.getElementById('commentInput')?.value || '').trim();
-            const after = pending.after;
-
-            const entry = {
-                id: Date.now().toString(),
-                date: ts(),
-                time: now(),
-                period: period(),
-                before: pending.before,
-                after: after,
-                song,
-                touch,
-                comment
-            };
-
-            D.checkins.push(entry);
-            updStreak(ts());
-            save();
-            r('result', { ...entry });
-        }
-
-        // ── INIT ──
-        r('home');
-    </script>
+function home(){
+  const t=ts();const s=D.streak;const c=D.checkins.filter(x=>x.date===t).length;
+  const e=per()==='Morning'?'🌅':per()==='Afternoon'?'☀️':'🌙';
+  return`
+  <div class="top-nav"><h1>Progress Tracker</h1><div class="streak">🔥 ${s.current} day streak</div></div>
+  <div class="card prompt fade-in">
+    <div style="display:inline-block;background:rgba(124,92,252,0.15);color:#9b83ff;padding:5px 13px;border-radius:14px;font-size:0.78rem;font-weight:600;margin-bottom:16px">${e} ${per()} Check-in</div>
+    <h2 style="margin-bottom:6px">How are you feeling?</h2>
+    <p style="color:#6b6b80;font-size:0.88rem;margin-bottom:20px">Rate your stress before and after your session.</p>
+    <button class="btn btn-primary" onclick="start()">Start Check-in</button>
+    ${c>0?`<p style="margin-top:12px;font-size:0.8rem;color:#6b6b80">${c} check-in${c>1?'s':''} today so far${c<2?' — aim for at least 2':''}</p>`:''}
+  </div>
+  <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;text-align:center;color:#6b6b80;font-size:0.8rem">💡 Building lasting calm takes time. Small, consistent sessions build the foundation. Showing up is the win.</div>
+  ${nav('home')}`;
+}
+function start(){pen={};r('before')}
+function before(){
+  return`
+  <div class="top-nav"><button class="btn-ghost btn" style="width:auto" onclick="r('home')">← Back</button><div style="flex:1"></div><span style="font-size:0.78rem;color:#6b6b80">Step 1 of 3</span></div>
+  <div class="card text-center fade-in">
+    <div style="font-size:0.9rem;font-weight:600;margin-bottom:6px;color:#b0b0c0">How stressed / overwhelmed are you right now?</div>
+    <div class="rating-big" id="bv">5</div>
+    <div class="slider-container"><input type="range" min="1" max="10" value="5" oninput="document.getElementById('bv').textContent=this.value"></div>
+    <div class="flex" style="justify-content:space-between;font-size:0.72rem;color:#6b6b80;margin-top:6px"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
+  </div>
+  <button class="btn btn-primary mt-8" onclick="pen.before=+document.getElementById('bv').textContent;r('after')">Continue →</button>
+  ${nav('ci')}`;
+}
+function after(){
+  return`
+  <div class="top-nav"><button class="btn-ghost btn" style="width:auto" onclick="r('before')">← Back</button><div style="flex:1"></div><span style="font-size:0.78rem;color:#6b6b80">Step 2 of 3</span></div>
+  <div class="card text-center" style="margin-bottom:8px;background:rgba(124,92,252,0.15);border:1px solid rgba(124,92,252,0.3)"><span style="font-size:0.78rem;color:#9b83ff">Your stress before: <strong>${pen.before}/10</strong></span></div>
+  <div class="card text-center fade-in">
+    <div style="font-size:0.9rem;font-weight:600;margin-bottom:6px;color:#b0b0c0">After your session — how stressed are you now?</div>
+    <div class="rating-big" id="av">3</div>
+    <div class="slider-container"><input type="range" min="1" max="10" value="3" oninput="document.getElementById('av').textContent=this.value"></div>
+    <div class="flex" style="justify-content:space-between;font-size:0.72rem;color:#6b6b80;margin-top:6px"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
+  </div>
+  <button class="btn btn-primary mt-8" onclick="pen.after=+document.getElementById('av').textContent;r('notes',{})">Continue →</button>
+  ${nav('ci')}`;
+}
+function notes(){
+  return`
+  <div class="top-nav"><button class="btn-ghost btn" style="width:auto" onclick="r('after')">← Back</button><div style="flex:1"></div><span style="font-size:0.78rem;color:#6b6b80">Step 3 of 3</span></div>
+  <div class="card fade-in">
+    <div class="card-title">Session Notes <span style="font-weight:400;text-transform:none;color:#6b6b80">(Optional, but highly beneficial)</span></div>
+    <label style="font-size:0.78rem;color:#6b6b80;display:block;margin-bottom:6px">What did you listen to?</label>
+    <input class="input-field" id="song" placeholder="e.g. I am Safe" style="margin-bottom:16px">
+    <label style="font-size:0.78rem;color:#6b6b80;display:block;margin-bottom:6px">Touch techniques used</label>
+    <div class="pill-group" id="tg">
+      <button class="pill" onclick="this.classList.toggle('selected')">🙌 Hands</button>
+      <button class="pill" onclick="this.classList.toggle('selected')">😌 Face</button>
+      <button class="pill" onclick="this.classList.toggle('selected')">💪 Arms</button>
+      <button class="pill" onclick="this.classList.toggle('selected')">✨ All</button>
+    </div>
+    <label style="font-size:0.78rem;color:#6b6b80;display:block;margin-bottom:6px">Any notes on how it felt?</label>
+    <textarea class="comment-area" id="com" rows="3" placeholder="e.g. Felt tension release in my shoulders. Calmer than usual today." oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+  </div>
+  <button class="btn btn-primary mt-8" onclick="doSave()">Save Check-in</button>
+  <button class="btn-ghost btn" style="margin-top:6px" onclick="doSave()">Skip notes →</button>
+  ${nav('ci')}`;
+}
+function doSave(){
+  const song=document.getElementById('song')?.value?.trim()||'';
+  const touch=Array.from(document.querySelectorAll('#tg .pill.selected')).map(e=>e.textContent.trim()).join(', ');
+  const comment=document.getElementById('com')?.value?.trim()||'';
+  const e={id:Date.now()+'',date:ts(),time:now(),period:per(),before:pen.before,after:pen.after,song,touch,comment};
+  D.checkins.push(e);updStreak(ts());save();r('result',e);
+}
+function result(d){
+  const r=d.before-d.after;
+  let msg,em;
+  if(r>=4){msg=`Incredible! You reduced your stress by <strong>${r} points</strong>. That's a big shift — well done 😊`;em='🎉'}
+  else if(r>=2){msg=`Well done! You reduced your stress by <strong>${r} points</strong> 😊`;em='🙌'}
+  else if(r===1){msg=`Nice one! You reduced your stress by <strong>1 point</strong>. Every shift counts 😊`;em='👍'}
+  else{msg='Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.';em=r<0?'❤️':'💪'}
+  return`
+  <div class="top-nav"><h1>Check-in Complete</h1></div>
+  <div class="card text-center fade-in" style="padding:28px 20px">
+    <div style="font-size:3rem;margin-bottom:8px">${em}</div>
+    <div class="flex" style="justify-content:center;gap:28px;margin:16px 0">
+      <div class="text-center"><div style="font-size:1.5rem;font-weight:700">${d.before}</div><div style="font-size:0.7rem;text-transform:uppercase;color:#6b6b80">Before</div></div>
+      <div style="font-size:1.4rem;color:#6b6b80;align-self:center">→</div>
+      <div class="text-center"><div style="font-size:1.5rem;font-weight:700">${d.after}</div><div style="font-size:0.7rem;text-transform:uppercase;color:#6b6b80">After</div></div>
+    </div>
+    ${r>0?`<div style="font-size:2.8rem;font-weight:800;color:#4ade80;margin:8px 0">−${r} points</div>`:'<div style="font-size:2.8rem;font-weight:800;color:#6b6b80">—</div>'}
+    <div style="font-size:1rem;color:#b0b0c0;margin-bottom:6px;line-height:1.5">${msg}</div>
+    ${d.song?`<p style="font-size:0.78rem;color:#6b6b80;margin-top:6px">🎵 ${d.song}</p>`:''}
+    ${d.touch?`<p style="font-size:0.78rem;color:#6b6b80;margin-top:2px">🤲 ${d.touch}</p>`:''}
+    ${d.comment?`<p style="font-size:0.78rem;color:#6b6b80;margin-top:2px">💬 ${d.comment}</p>`:''}
+    <p style="font-size:0.7rem;color:#6b6b80;margin-top:12px">${fmtFull(ts())} · ${now()}</p>
+  </div>
+  <button class="btn btn-primary" onclick="r('dash')">See My Progress →</button>
+  <button class="btn" style="background:#1a1a26;color:#e8e8f2;border:1px solid rgba(255,255,255,0.08);margin-top:8px" onclick="r('home')">Back to Home</button>
+  ${nav('home')}`;
+}
+function dash(){
+  const t=ts(),s=D.streak,a=D.checkins,c=a.filter(x=>x.date===t).length;
+  const wk={start:new Date(),end:new Date()};wk.start.setDate(wk.start.getDate()-wk.start.getDay()+1);wk.end=new Date(wk.start);wk.end.setDate(wk.end.getDate()+6);
+  const ws=wk.start.toISOString().split('T')[0],we=wk.end.toISOString().split('T')[0];
+  const wc=a.filter(x=>x.date>=ws&&x.date<=we);
+  const ar=wc.length>0?(wc.reduce((s,x)=>s+(x.before-x.after),0)/wc.length).toFixed(1):'—';
+  const tot=a.length;
+  return`
+  <div class="top-nav"><h1>Your Progress</h1><button class="btn-ghost btn" style="width:auto" onclick="exportCSV()">📤</button><button class="btn-ghost btn" style="width:auto" onclick="backup()">💾</button></div>
+  <div class="stat-grid fade-in">
+    <div class="stat-card"><div class="stat-value">${s.current}</div><div class="stat-label">Day Streak</div><div class="stat-sub">Best: ${s.longest}</div></div>
+    <div class="stat-card"><div class="stat-value">${c}</div><div class="stat-label">Today</div><div class="stat-sub">${c>=2?'✅ On track':'Aim: 2'}</div></div>
+    <div class="stat-card"><div class="stat-value">${ar}</div><div class="stat-label">Avg Reduction</div><div class="stat-sub">This week · ${wc.length} entries</div></div>
+    <div class="stat-card"><div class="stat-value">${tot}</div><div class="stat-label">Total Check-ins</div><div class="stat-sub">${wc.filter(x=>x.before>x.after).length} improved</div></div>
+  </div>
+  <div class="reminder" style="background:rgba(255,255,255,0.03);border-radius:12px;padding:14px 16px;text-align:center;color:#6b6b80;font-size:0.8rem;margin-top:12px">💡 Building lasting calm is not linear. Some days you'll feel big shifts — other days, just showing up is the win.</div>
+  ${nav('dash')}`;
+}
+function hist(){
+  const l=[...D.checkins].reverse();
+  return`
+  <div class="top-nav"><button class="btn-ghost btn" style="width:auto" onclick="r('dash')">←</button><div style="flex:1"></div><h1 style="font-size:1.1rem">History</h1></div>
+  ${l.length===0?'<div class="text-center" style="padding:32px 20px;color:#6b6b80;font-size:0.88rem">No check-ins yet. Start your first one from home.</div>':''}
+  ${l.map((x,i)=>{
+    const r=x.before-x.after;
+    const n=[x.song,x.touch,x.comment].filter(Boolean).join(' · ');
+    const p=l[i+1];
+    return`${!p||x.date!==p.date?`<div style="font-size:0.72rem;color:#6b6b80;font-weight:600;padding:8px 4px 4px;text-transform:uppercase;letter-spacing:0.5px">${fmtFull(x.date)}</div>`:''}
+    <div class="flex" style="align-items:center;gap:10px;padding:12px 14px;background:#1a1a26;border-radius:12px;margin-bottom:6px;border:1px solid rgba(255,255,255,0.04)">
+      <span style="font-size:0.7rem;color:#6b6b80;min-width:52px">${x.time}</span>
+      <span style="font-size:0.9rem;font-weight:700">${x.before}</span>
+      <span style="color:#6b6b80;font-size:0.75rem">→</span>
+      <span style="font-size:0.9rem;font-weight:700">${x.after}</span>
+      <span style="font-size:0.75rem;font-weight:700;padding:3px 8px;border-radius:10px;color:${r>0?'#4ade80':r<0?'#f87171':'#6b6b80'};background:${r>0?'rgba(74,222,128,0.15)':r<0?'rgba(248,113,113,0.12)':'rgba(255,255,255,0.05)'}">${r!==0?(r>0?'−':'+')+Math.abs(r):'0'}</span>
+      ${n?`<span style="font-size:0.7rem;color:#6b6b80;margin-left:auto;max-width:90px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${n}">${n}</span>`:''}
+    </div>`;
+  }).join('')}
+  ${nav('hist')}`;
+}
+function exportCSV(){
+  const rows=D.checkins.map(c=>[c.date,c.time,c.period,c.before,c.after,c.before-c.after,'"'+c.song+'"','"'+c.touch+'"','"'+c.comment+'"'].join(','));
+  const csv='Date,Time,Period,Before,After,Reduction,Song,Touch,Notes\n'+rows.join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='tracker.csv';a.click();
+  showToast('✅ Exported');
+}
+function backup(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D)],{type:'application/json'}));a.download='backup.json';a.click();
+  showToast('💾 Backup saved');
+}
+function showToast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:200;background:#4ade80;color:#000;padding:10px 22px;border-radius:22px;font-size:0.85rem;font-weight:700;box-shadow:0 4px 20px rgba(74,222,128,0.4);animation:fadeIn .3s';document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+r('home');
+</script>
 </body>
 </html>
