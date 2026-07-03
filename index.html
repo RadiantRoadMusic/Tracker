@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Radiant Road Records</title>
+<title>Progress Tracker</title>
 <style>
 :root {
   --bg: #0f0f15; --card: #1a1a26; --card-hover: #1f1f2e;
@@ -18,36 +18,24 @@
   --radius: 18px; --radius-sm: 12px; --radius-xs: 8px;
   --nav-height: 70px; --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: #0a0a10; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: #0a0a10; color: var(--text); min-height: 100vh;
+  background: var(--bg); color: var(--text); min-height: 100vh;
   display: flex; justify-content: center; align-items: flex-start;
   -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
 }
 .app {
   width: 100%; max-width: 440px; min-height: 100vh;
-  background: var(--bg);
   padding: 16px 16px calc(var(--nav-height) + var(--safe-bottom) + 8px);
   display: flex; flex-direction: column; position: relative;
-  box-shadow: 0 0 80px rgba(124,92,252,0.06), 0 0 0 1px rgba(255,255,255,0.03);
 }
-
-/* ── Branded Header ── */
-.brand-header { text-align: center; padding: 18px 0 12px; }
-.brand-header svg { width: 48px; height: 48px; margin-bottom: 6px; }
-.brand-header .brand-name { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.2px; color: var(--text); }
-.brand-header .brand-sub { font-size: 0.78rem; font-weight: 500; color: var(--accent-glow); letter-spacing: 0.6px; text-transform: uppercase; margin-top: 2px; }
-
-/* ── Top nav bar (used on non-home screens) ── */
-.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 4px 4px 12px; }
-.top-nav h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.3px; }
+.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 8px 4px 16px; }
+.top-nav h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.3px; }
 .streak-pill {
   display: flex; align-items: center; gap: 6px; background: var(--accent-soft);
   padding: 7px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--accent-glow);
 }
-
 .card {
   background: var(--card); border-radius: var(--radius); padding: 20px;
   margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.04);
@@ -107,7 +95,7 @@ body {
 .ra-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
 .ra-arrow { font-size: 1.4rem; color: var(--text-muted); align-self: center; }
 
-/* Inputs */
+/* Session notes */
 .input-field { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
   border-radius: var(--radius-sm); padding: 14px; color: var(--text); font-family: inherit;
   font-size: 0.88rem; }
@@ -115,7 +103,7 @@ body {
 .input-field:focus { outline: none; border-color: var(--accent); }
 .comment-area { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
   border-radius: var(--radius-sm); padding: 14px; color: var(--text); font-family: inherit;
-  font-size: 0.88rem; resize: vertical; min-height: 72px; }
+  font-size: 0.88rem; resize: none; }
 .comment-area::placeholder { color: var(--text-muted); }
 .comment-area:focus { outline: none; border-color: var(--accent); }
 
@@ -136,19 +124,23 @@ body {
 .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text); }
 .stat-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; letter-spacing: 0.5px; }
 .stat-sub { font-size: 0.72rem; color: var(--accent-glow); margin-top: 2px; }
+
 .chart-container { margin-top: 4px; }
 .chart-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .chart-date { width: 42px; font-size: 0.72rem; color: var(--text-muted); text-align: right; flex-shrink: 0; }
 .chart-bar-wrap { flex: 1; height: 22px; background: rgba(255,255,255,0.04); border-radius: 6px; overflow: hidden; position: relative; }
 .chart-bar-fill { height: 100%; border-radius: 6px; transition: width 0.5s ease; display: flex; align-items: center; padding-left: 8px; }
 .chart-bar-fill.good { background: linear-gradient(90deg, #4ade80, #22c55e); }
-.chart-bar-fill.ok   { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
-.chart-bar-fill.low  { background: linear-gradient(90deg, #f87171, #ef4444); }
+.chart-bar-fill.ok { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.chart-bar-fill.low { background: linear-gradient(90deg, #f87171, #ef4444); }
 .chart-bar-num { font-size: 0.68rem; font-weight: 700; color: rgba(0,0,0,0.55); }
+
 .weekly-card { background: var(--accent-soft); border: 1px solid var(--accent-medium); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 14px; text-align: center; }
 .weekly-card .msg { font-size: 0.88rem; color: var(--accent-glow); font-weight: 600; }
+
 .reminder-card { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; text-align: center; }
 .reminder-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
 .empty-state { text-align: center; padding: 32px 20px; color: var(--text-muted); }
 .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
 .empty-state p { font-size: 0.88rem; }
@@ -161,8 +153,8 @@ body {
 .history-score { font-size: 0.9rem; font-weight: 700; }
 .history-arrow { color: var(--text-muted); font-size: 0.75rem; }
 .history-delta { font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
-.history-delta.pos  { color: var(--success); background: var(--success-soft); }
-.history-delta.neg  { color: var(--danger); background: var(--danger-soft); }
+.history-delta.pos { color: var(--success); background: var(--success-soft); }
+.history-delta.neg { color: var(--danger); background: var(--danger-soft); }
 .history-delta.zero { color: var(--text-muted); background: rgba(255,255,255,0.05); }
 .history-notes { font-size: 0.7rem; color: var(--text-muted); margin-left: auto; max-width: 90px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -173,7 +165,7 @@ body {
   font-size: 0.85rem; font-weight: 700; box-shadow: 0 4px 20px rgba(74,222,128,0.4);
   animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
 }
-@keyframes toastIn  { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
 
 /* Bottom nav */
@@ -193,52 +185,44 @@ body {
 .fade-in { animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .scroll-area { max-height: 340px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.mt-8  { margin-top: 8px; }
+.mt-8 { margin-top: 8px; }
 .mt-12 { margin-top: 12px; }
 .step-indicator { font-size: 0.78rem; color: var(--text-muted); }
 </style>
 </head>
 <body><div class="app" id="app"></div>
-<script>
-// ── BRAND SVG ICON ──
-const brandIcon = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="g" x1="6" y1="42" x2="42" y2="6"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#7c5cfc"/></linearGradient></defs>
-  <circle cx="24" cy="24" r="21" fill="none" stroke="url(#g)" stroke-width="1.5" opacity="0.3"/>
-  <path d="M10 34 Q18 22 24 16 Q30 22 38 34" fill="none" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/>
-  <path d="M14 30 Q19 24 24 20 Q29 24 34 30" fill="none" stroke="url(#g)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-  <circle cx="24" cy="14" r="3" fill="#fbbf24" opacity="0.9"/>
-  <circle cx="24" cy="14" r="6" fill="#fbbf24" opacity="0.12"/>
-</svg>`;
 
+<script>
 // ── DATA ──
 const STORAGE_KEY = 'nstrk_data';
 let D = load();
+
 function load() {
   try { const r = localStorage.getItem(STORAGE_KEY); if (r) return JSON.parse(r); } catch(e) {}
   return { checkins: [], streak: { current: 0, lastDate: null, longest: 0 } };
 }
 function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(D)); } catch(e) {} }
 function ts() { return new Date().toISOString().split('T')[0]; }
-function now() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }); }
-function fmt(d) { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString([], { month: 'short', day: 'numeric' }); }
-function fmtFull(d) { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }); }
+function now() { return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:true}); }
+function fmt(d) { const dt = new Date(d+'T00:00:00'); return dt.toLocaleDateString([],{month:'short',day:'numeric'}); }
+function fmtFull(d) { const dt = new Date(d+'T00:00:00'); return dt.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'}); }
 function period() { const h = new Date().getHours(); return h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening'; }
 
 function updStreak(today) {
   const s = D.streak;
-  if (!s.lastDate) { s.current = 1; s.longest = 1; s.lastDate = today; return; }
-  if (s.lastDate === today) return;
-  const diff = Math.round((new Date(today + 'T00:00:00') - new Date(s.lastDate + 'T00:00:00')) / 86400000);
-  if (diff === 1) { s.current++; if (s.current > s.longest) s.longest = s.current; }
-  else if (diff > 1) { s.current = 1; }
-  s.lastDate = today;
+  if (!s.lastDate) { s.current=1; s.longest=1; s.lastDate=today; return; }
+  if (s.lastDate===today) return;
+  const diff = Math.round((new Date(today+'T00:00:00') - new Date(s.lastDate+'T00:00:00'))/(86400000));
+  if (diff===1) { s.current++; if (s.current>s.longest) s.longest=s.current; }
+  else if (diff>1) { s.current=1; }
+  s.lastDate=today;
 }
 
 function weekRange() {
   const n = new Date(); const day = n.getDay();
-  const start = new Date(n); start.setDate(n.getDate() - day + (day === 0 ? -6 : 1));
-  const end = new Date(start); end.setDate(end.getDate() + 6);
-  return { start: start.toISOString().split('T')[0], end: end.toISOString().split('T')[0] };
+  const start = new Date(n); start.setDate(n.getDate() - day + (day===0?-6:1));
+  const end = new Date(start); end.setDate(end.getDate()+6);
+  return {start:start.toISOString().split('T')[0], end:end.toISOString().split('T')[0]};
 }
 
 // ── STATE ──
@@ -246,7 +230,7 @@ let screen = 'home';
 let pending = { before: null };
 
 // ── RENDER ──
-function r(s, data) { screen = s; document.getElementById('app').innerHTML = renderScreen(s, data); }
+function r(s, data) { screen=s; document.getElementById('app').innerHTML = renderScreen(s,data); }
 
 function renderScreen(s, d) {
   switch(s) {
@@ -273,45 +257,39 @@ function nav(active) {
 // ── HOME ──
 function homeUI() {
   const today = ts(); const s = D.streak;
-  const todayC = D.checkins.filter(c => c.date === today).length;
-  const emoji = period() === 'Morning' ? '🌅' : period() === 'Afternoon' ? '☀️' : '🌙';
+  const todayC = D.checkins.filter(c=>c.date===today).length;
+  const emoji = period()==='Morning'?'🌅':period()==='Afternoon'?'☀️':'🌙';
   return `
-    <div class="brand-header fade-in">
-      ${brandIcon}
-      <div class="brand-name">Radiant Road Records</div>
-      <div class="brand-sub">Progress Tracker</div>
-    </div>
-    <div style="text-align:center;margin-bottom:16px;">
-      <span class="streak-pill" style="display:inline-flex;">🔥 ${s.current} day streak</span>
-    </div>
-    <div class="card checkin-prompt fade-in">
-      <div class="time-badge">${emoji} ${period()} Check-in</div>
-      <h2>How are you feeling?</h2>
-      <p>Rate your stress before and after your session.</p>
-      <button class="btn btn-primary" onclick="start()">Start Check-in</button>
-      ${todayC > 0 ? `<p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">${todayC} check-in${todayC>1?'s':''} today so far${todayC<2?' — aim for at least 2':''}</p>` : ''}
-    </div>
-    <div class="reminder-card fade-in"><p>💡 Building lasting calm takes time. Small, consistent sessions build the foundation. Showing up is the win.</p></div>
-    ${nav('home')}`;
+  <div class="top-nav fade-in"><h1>Progress Tracker</h1><div class="streak-pill">🔥 ${s.current} day streak</div></div>
+  <div class="spacer" style="flex:1;"></div>
+  <div class="card checkin-prompt fade-in">
+    <div class="time-badge">${emoji} ${period()} Check-in</div>
+    <h2>How are you feeling?</h2>
+    <p>Rate your stress before and after your session.</p>
+    <button class="btn btn-primary" onclick="start()">Start Check-in</button>
+    ${todayC>0?`<p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">${todayC} check-in${todayC>1?'s':''} today so far${todayC<2?' — aim for at least 2':''}</p>`:''}
+  </div>
+  <div class="reminder-card fade-in"><p>💡 Building lasting calm takes time. Small, consistent sessions build the foundation. Showing up is the win.</p></div>
+  ${nav('home')}`;
 }
 
 // ── BEFORE ──
 function beforeUI() {
   return `
-    <div class="top-nav fade-in">
-      <button class="btn btn-ghost btn-sm" onclick="r('home')">← Back</button>
-      <div class="spacer"></div><span class="step-indicator">Step 1 of 3</span>
+  <div class="top-nav fade-in">
+    <button class="btn btn-ghost btn-sm" onclick="r('home')">← Back</button>
+    <div class="spacer"></div><span class="step-indicator">Step 1 of 3</span>
+  </div>
+  <div class="card rating-section fade-in">
+    <div class="rating-label">How stressed / overwhelmed are you right now?</div>
+    <div class="rating-big" id="beforeVal">5</div>
+    <div class="slider-container">
+      <input type="range" min="1" max="10" value="5" id="beforeSlider" oninput="updRating('beforeVal',this.value)">
     </div>
-    <div class="card rating-section fade-in">
-      <div class="rating-label">How stressed / overwhelmed are you right now?</div>
-      <div class="rating-big" id="beforeVal">5</div>
-      <div class="slider-container">
-        <input type="range" min="1" max="10" value="5" id="beforeSlider" oninput="updRating('beforeVal',this.value)">
-      </div>
-      <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
-    </div>
-    <button class="btn btn-primary mt-8" onclick="doBefore()">Continue →</button>
-    ${nav('checkin')}`;
+    <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
+  </div>
+  <button class="btn btn-primary mt-8" onclick="doBefore()">Continue →</button>
+  ${nav('checkin')}`;
 }
 
 function updRating(id, v) { document.getElementById(id).textContent = v; }
@@ -319,58 +297,53 @@ function updRating(id, v) { document.getElementById(id).textContent = v; }
 // ── AFTER ──
 function afterUI() {
   return `
-    <div class="top-nav fade-in">
-      <button class="btn btn-ghost btn-sm" onclick="r('before')">← Back</button>
-      <div class="spacer"></div><span class="step-indicator">Step 2 of 3</span>
+  <div class="top-nav fade-in">
+    <button class="btn btn-ghost btn-sm" onclick="r('before')">← Back</button>
+    <div class="spacer"></div><span class="step-indicator">Step 2 of 3</span>
+  </div>
+  <div class="card" style="text-align:center;margin-bottom:8px;background:var(--accent-soft);border:1px solid var(--accent-medium);">
+    <span style="font-size:0.78rem;color:var(--accent-glow);">Your stress before: <strong>${pending.before}/10</strong></span>
+  </div>
+  <div class="card rating-section fade-in">
+    <div class="rating-label">After your session — how stressed are you now?</div>
+    <div class="rating-big" id="afterVal">3</div>
+    <div class="slider-container">
+      <input type="range" min="1" max="10" value="3" id="afterSlider" oninput="updRating('afterVal',this.value)">
     </div>
-    <div class="card" style="text-align:center;margin-bottom:8px;background:var(--accent-soft);border:1px solid var(--accent-medium);">
-      <span style="font-size:0.78rem;color:var(--accent-glow);">Your stress before: <strong>${pending.before}/10</strong></span>
-    </div>
-    <div class="card rating-section fade-in">
-      <div class="rating-label">After your session — how stressed are you now?</div>
-      <div class="rating-big" id="afterVal">3</div>
-      <div class="slider-container">
-        <input type="range" min="1" max="10" value="3" id="afterSlider" oninput="updRating('afterVal',this.value)">
-      </div>
-      <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
-    </div>
-    <button class="btn btn-primary mt-8" onclick="doAfter()">Continue →</button>
-    ${nav('checkin')}`;
+    <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
+  </div>
+  <button class="btn btn-primary mt-8" onclick="doAfter()">Continue →</button>
+  ${nav('checkin')}`;
 }
 
 // ── NOTES ──
 function notesUI(d) {
   pending.after = d.after;
   return `
-    <div class="top-nav fade-in">
-      <button class="btn btn-ghost btn-sm" onclick="r('after')">← Back</button>
-      <div class="spacer"></div><span class="step-indicator">Step 3 of 3</span>
+  <div class="top-nav fade-in">
+    <button class="btn btn-ghost btn-sm" onclick="r('after')">← Back</button>
+    <div class="spacer"></div><span class="step-indicator">Step 3 of 3</span>
+  </div>
+  <div class="card fade-in">
+    <div class="card-title">Session Notes <span style="font-weight:400;text-transform:none;">(all optional)</span></div>
+    <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">What did you listen to?</label>
+    <input class="input-field" id="songInput" placeholder="e.g. Weightless, or a song from Week 3…" style="margin-bottom:16px;">
+    <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Touch techniques used</label>
+    <div class="pill-group" id="touchGroup">
+      <button class="pill" data-touch="Hands" onclick="togglePill(this)">🙌 Hands</button>
+      <button class="pill" data-touch="Face" onclick="togglePill(this)">😌 Face</button>
+      <button class="pill" data-touch="Arms" onclick="togglePill(this)">💪 Arms</button>
+      <button class="pill" data-touch="All of the above" onclick="togglePill(this)">✨ All</button>
     </div>
-    <div class="card fade-in">
-      <div class="card-title">Session Notes <span style="font-weight:400;text-transform:none;">(Optional, but highly beneficial)</span></div>
-      <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">What did you listen to?</label>
-      <input class="input-field" id="songInput" placeholder="e.g. I am Safe" style="margin-bottom:16px;">
-      <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Touch techniques used</label>
-      <div class="pill-group" id="touchGroup">
-        <button class="pill" data-touch="Hands" onclick="togglePill(this)">🙌 Hands</button>
-        <button class="pill" data-touch="Face" onclick="togglePill(this)">😌 Face</button>
-        <button class="pill" data-touch="Arms" onclick="togglePill(this)">💪 Arms</button>
-        <button class="pill" data-touch="All of the above" onclick="togglePill(this)">✨ All</button>
-      </div>
-      <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Any notes on how it felt?</label>
-      <textarea class="comment-area" id="commentInput" rows="3" placeholder="e.g. Felt tension release in my shoulders. Calmer than usual today." oninput="autoResize(this)"></textarea>
-    </div>
-    <button class="btn btn-primary mt-8" onclick="doSave()">Save Check-in</button>
-    <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="doSave()">Skip notes →</button>
-    ${nav('checkin')}`;
+    <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Any notes on how it felt?</label>
+    <textarea class="comment-area" id="commentInput" rows="3" placeholder="e.g. Felt tension release in my shoulders. Calmer than usual today."></textarea>
+  </div>
+  <button class="btn btn-primary mt-8" onclick="doSave()">Save Check-in</button>
+  <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="doSave()">Skip notes →</button>
+  ${nav('checkin')}`;
 }
 
 function togglePill(el) { el.classList.toggle('selected'); }
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.max(72, el.scrollHeight) + 'px';
-}
 
 // ── RESULT ──
 function resultUI(d) {
@@ -378,153 +351,140 @@ function resultUI(d) {
   const reduction = before - after;
   const cls = reduction > 0 ? 'reduced' : 'neutral';
   let msg, emoji;
-  if (reduction >= 4) {
-    msg = "Incredible! You reduced your stress by <strong>" + reduction + " points</strong>. That's a big shift — well done 🙂";
-    emoji = '🎉';
-  } else if (reduction >= 2) {
-    msg = "Well done! You reduced your stress by <strong>" + reduction + " points</strong> 🙂";
-    emoji = '🙌';
-  } else if (reduction === 1) {
-    msg = "Nice one! You reduced your stress by <strong>1 point</strong>. Every shift counts 🙂";
-    emoji = '👍';
-  } else if (reduction === 0) {
-    msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
-    emoji = '💪';
-  } else {
-    msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
-    emoji = '❤️';
-  }
+  if (reduction >= 4) { msg = "Incredible! You reduced your stress by <strong>"+reduction+" points</strong>. That's a big shift — well done :)"; emoji='🎉'; }
+  else if (reduction >= 2) { msg = "Well done! You reduced your stress by <strong>"+reduction+" points</strong> :)"; emoji='🙌'; }
+  else if (reduction === 1) { msg = "Nice one! You reduced your stress by <strong>1 point</strong>. Every shift counts :)"; emoji='👍'; }
+  else if (reduction === 0) { msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more."; emoji='💪'; }
+  else { msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more."; emoji='❤️'; }
+
   return `
-    <div class="top-nav fade-in"><h1>Check-in Complete</h1><div class="spacer"></div></div>
-    <div class="card result-card fade-in">
-      <div style="font-size:3rem;margin-bottom:8px;">${emoji}</div>
-      <div class="result-before-after">
-        <div class="ra-col"><div class="ra-val">${before}</div><div class="ra-label">Stress Before</div></div>
-        <div class="ra-arrow">→</div>
-        <div class="ra-col"><div class="ra-val">${after}</div><div class="ra-label">Stress After</div></div>
-      </div>
-      ${reduction > 0 ? `<div class="result-delta reduced">−${reduction} points</div>` : `<div class="result-delta neutral">—</div>`}
-      <div class="result-msg">${msg}</div>
-      ${song ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">🎵 ${song}</p>` : ''}
-      ${touch ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">🤲 ${touch}</p>` : ''}
-      ${comment ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">💬 ${comment}</p>` : ''}
-      <p style="font-size:0.7rem;color:var(--text-muted);margin-top:12px;">${fmtFull(ts())} · ${now()}</p>
+  <div class="top-nav fade-in"><h1>Check-in Complete</h1><div class="spacer"></div></div>
+  <div class="card result-card fade-in">
+    <div style="font-size:3rem;margin-bottom:8px;">${emoji}</div>
+    <div class="result-before-after">
+      <div class="ra-col"><div class="ra-val">${before}</div><div class="ra-label">Stress Before</div></div>
+      <div class="ra-arrow">→</div>
+      <div class="ra-col"><div class="ra-val">${after}</div><div class="ra-label">Stress After</div></div>
     </div>
-    <button class="btn btn-primary" onclick="r('dashboard')">See My Progress →</button>
-    <button class="btn btn-secondary mt-8" onclick="r('home')">Back to Home</button>
-    ${nav('home')}`;
+    ${reduction > 0 ? `<div class="result-delta reduced">−${reduction} points</div>` : `<div class="result-delta neutral">—</div>`}
+    <div class="result-msg">${msg}</div>
+    ${song ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">🎵 ${song}</p>` : ''}
+    ${touch ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">🤲 ${touch}</p>` : ''}
+    ${comment ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">💬 ${comment}</p>` : ''}
+    <p style="font-size:0.7rem;color:var(--text-muted);margin-top:12px;">${fmtFull(ts())} · ${now()}</p>
+  </div>
+  <button class="btn btn-primary" onclick="r('dashboard')">See My Progress →</button>
+  <button class="btn btn-secondary mt-8" onclick="r('home')">Back to Home</button>
+  ${nav('home')}`;
 }
 
 // ── DASHBOARD ──
 function dashUI() {
   const today = ts(); const s = D.streak;
   const all = D.checkins;
-  const todayC = all.filter(c => c.date === today).length;
+  const todayC = all.filter(c=>c.date===today).length;
   const wk = weekRange();
-  const wkC = all.filter(c => c.date >= wk.start && c.date <= wk.end);
-  const wkReductions = wkC.filter(c => c.before > c.after);
-  const avgR = wkC.length > 0 ? (wkC.reduce((a, c) => a + (c.before - c.after), 0) / wkC.length).toFixed(1) : '—';
+  const wkC = all.filter(c=>c.date>=wk.start&&c.date<=wk.end);
+  const wkReductions = wkC.filter(c=>c.before>c.after);
+  const avgR = wkC.length>0 ? (wkC.reduce((a,c)=>a+(c.before-c.after),0)/wkC.length).toFixed(1) : '—';
   const total = all.length;
-  const wkPct = wkC.length >= 14 ? 100 : Math.round(wkC.length / 14 * 100);
+  const wkPct = wkC.length >= 14 ? 100 : Math.round(wkC.length/14*100);
 
+  // weekly message
   let wkMsg = '';
   if (wkC.length >= 14) wkMsg = '🎉 Amazing! You hit your 14 check-in target this week. Your nervous system thanks you!';
-  else if (wkC.length >= 10) wkMsg = `💪 Great consistency! ${14 - wkC.length} more check-ins to hit your weekly target.`;
+  else if (wkC.length >= 10) wkMsg = `💪 Great consistency! ${14-wkC.length} more check-ins to hit your weekly target.`;
   else if (wkC.length >= 5) wkMsg = `🌱 Building momentum — ${wkC.length} check-ins this week. Keep going, healing happens with repetition.`;
   else if (wkC.length > 0) wkMsg = `🌱 Just getting started this week. Every check-in builds the habit.`;
   else wkMsg = 'A new week begins. Aim for at least 2 check-ins a day — your nervous system will thank you.';
 
+  // last 7 days chart
   const last7 = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(); d.setDate(d.getDate() - i); const ds = d.toISOString().split('T')[0];
-    const dc = all.filter(c => c.date === ds);
-    const avg = dc.length > 0 ? (dc.reduce((a, c) => a + (c.before - c.after), 0) / dc.length).toFixed(1) : null;
-    last7.push({ date: ds, label: fmt(ds), avg, count: dc.length });
-  }
+  for (let i=6;i>=0;i--) { const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().split('T')[0];const dc=all.filter(c=>c.date===ds);const avg=dc.length>0?(dc.reduce((a,c)=>a+(c.before-c.after),0)/dc.length).toFixed(1):null;last7.push({date:ds,label:fmt(ds),avg,count:dc.length}); }
 
   return `
-    <div class="top-nav fade-in">
-      <h1>Your Progress</h1>
-      <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📤 Export</button>
-      <button class="btn btn-ghost btn-sm" onclick="backupData()">💾 Backup</button>
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
-      <input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="restoreData(this)">
+  <div class="top-nav fade-in">
+    <h1>Your Progress</h1>
+    <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📤 Export</button>
+    <button class="btn btn-ghost btn-sm" onclick="backupData()">💾 Backup</button>
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
+    <input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="restoreData(this)">
+  </div>
+  ${wkMsg ? `<div class="weekly-card fade-in"><div class="msg">${wkMsg}</div></div>` : ''}
+  <div class="stat-grid fade-in">
+    <div class="stat-card"><div class="stat-value">${s.current}</div><div class="stat-label">Day Streak</div><div class="stat-sub">Best: ${s.longest}</div></div>
+    <div class="stat-card"><div class="stat-value">${todayC}</div><div class="stat-label">Today</div><div class="stat-sub">${todayC>=2?'✅ Target hit':'Min target: 2'}</div></div>
+    <div class="stat-card"><div class="stat-value">${avgR}</div><div class="stat-label">Avg Reduction</div><div class="stat-sub">This week · ${wkC.length} entries</div></div>
+    <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Check-ins</div><div class="stat-sub">${wkReductions.length} showed improvement</div></div>
+  </div>
+  <div class="card fade-in mt-12">
+    <div class="card-title">Last 7 Days — Avg Stress Reduction</div>
+    <div class="chart-container">
+      ${last7.map(d=>{
+        if(d.avg===null) return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><span style="font-size:0.7rem;color:var(--text-muted);padding-left:8px;">No data</span></div></div>`;
+        const v=parseFloat(d.avg); const pct=Math.min(Math.abs(v)*10,100); const cls=v>=2?'good':v>=0?'ok':'low';
+        return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><div class="chart-bar-fill ${cls}" style="width:${pct}%"><span class="chart-bar-num">${v>0?'−'+v:v}</span></div></div><span style="font-size:0.7rem;color:var(--text-muted);">${d.count}</span></div>`;
+      }).join('')}
     </div>
-    ${wkMsg ? `<div class="weekly-card fade-in"><div class="msg">${wkMsg}</div></div>` : ''}
-    <div class="stat-grid fade-in">
-      <div class="stat-card"><div class="stat-value">${s.current}</div><div class="stat-label">Day Streak</div><div class="stat-sub">Best: ${s.longest}</div></div>
-      <div class="stat-card"><div class="stat-value">${todayC}</div><div class="stat-label">Today</div><div class="stat-sub">${todayC >= 2 ? '✅ Target hit' : 'Min target: 2'}</div></div>
-      <div class="stat-card"><div class="stat-value">${avgR}</div><div class="stat-label">Avg Reduction</div><div class="stat-sub">This week · ${wkC.length} entries</div></div>
-      <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Check-ins</div><div class="stat-sub">${wkReductions.length} showed improvement</div></div>
-    </div>
-    <div class="card fade-in mt-12">
-      <div class="card-title">Last 7 Days — Avg Stress Reduction</div>
-      <div class="chart-container">
-        ${last7.map(d => {
-          if (d.avg === null) return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><span style="font-size:0.7rem;color:var(--text-muted);padding-left:8px;">No data</span></div></div>`;
-          const v = parseFloat(d.avg); const pct = Math.min(Math.abs(v) * 10, 100); const cls = v >= 2 ? 'good' : v >= 0 ? 'ok' : 'low';
-          return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><div class="chart-bar-fill ${cls}" style="width:${pct}%"><span class="chart-bar-num">${v > 0 ? '−' + v : v}</span></div></div><span style="font-size:0.7rem;color:var(--text-muted);">${d.count}</span></div>`;
-        }).join('')}
-      </div>
-    </div>
-    <div class="reminder-card fade-in"><p>💡 Building lasting calm is not linear. Some days you'll feel big shifts — other days, just showing up is the win. Trust the process and keep going.</p></div>
-    ${nav('dashboard')}`;
+  </div>
+  <div class="reminder-card fade-in"><p>💡 Building lasting calm is not linear. Some days you'll feel big shifts — other days, just showing up is the win. Trust the process and keep going.</p></div>
+  ${nav('dashboard')}`;
 }
 
 // ── HISTORY ──
 function histUI() {
   const list = [...D.checkins].reverse();
   return `
-    <div class="top-nav fade-in">
-      <button class="btn btn-ghost btn-sm" onclick="r('dashboard')">← Dashboard</button>
-      <div class="spacer"></div><h1 style="font-size:1.1rem;">History</h1>
-    </div>
-    <div class="scroll-area fade-in">
-      ${list.length === 0 ? `<div class="empty-state"><div class="icon">📋</div><p>No check-ins yet.<br>Start your first one from the home screen.</p></div>` : ''}
-      ${list.map((c, i) => {
-        const red = c.before - c.after; const dCls = red > 0 ? 'pos' : red < 0 ? 'neg' : 'zero';
-        const dSign = red > 0 ? '−' : red < 0 ? '+' : ''; const prev = list[i - 1];
-        const notes = [c.song, c.touch, c.comment].filter(Boolean).join(' · ');
-        return `${(!prev || c.date !== prev.date) ? `<div style="font-size:0.72rem;color:var(--text-muted);font-weight:600;padding:8px 4px 4px;text-transform:uppercase;letter-spacing:0.5px;">${fmtFull(c.date)}</div>` : ''}
-        <div class="history-item fade-in">
-          <div class="history-time">${c.time}</div>
-          <div class="history-scores">
-            <span class="history-score">${c.before}</span><span class="history-arrow">→</span><span class="history-score">${c.after}</span>
-            <span class="history-delta ${dCls}">${red !== 0 ? dSign + Math.abs(red) : '0'}</span>
-          </div>
-          ${notes ? `<span class="history-notes" title="${esc(notes)}">${notes}</span>` : ''}
-        </div>`;
-      }).join('')}
-    </div>
-    ${nav('history')}`;
+  <div class="top-nav fade-in">
+    <button class="btn btn-ghost btn-sm" onclick="r('dashboard')">← Dashboard</button>
+    <div class="spacer"></div><h1 style="font-size:1.1rem;">History</h1>
+  </div>
+  <div class="scroll-area fade-in">
+    ${list.length===0?`<div class="empty-state"><div class="icon">📋</div><p>No check-ins yet.<br>Start your first one from the home screen.</p></div>`:''}
+    ${list.map((c,i)=>{
+      const red=c.before-c.after; const dCls=red>0?'pos':red<0?'neg':'zero';
+      const dSign=red>0?'−':red<0?'+':''; const prev=list[i-1];
+      const notes = [c.song, c.touch, c.comment].filter(Boolean).join(' · ');
+      return `${(!prev||c.date!==prev.date)?`<div style="font-size:0.72rem;color:var(--text-muted);font-weight:600;padding:8px 4px 4px;text-transform:uppercase;letter-spacing:0.5px;">${fmtFull(c.date)}</div>`:''}
+      <div class="history-item fade-in">
+        <div class="history-time">${c.time}</div>
+        <div class="history-scores">
+          <span class="history-score">${c.before}</span><span class="history-arrow">→</span><span class="history-score">${c.after}</span>
+          <span class="history-delta ${dCls}">${red!==0?dSign+Math.abs(red):'0'}</span>
+        </div>
+        ${notes?`<span class="history-notes" title="${esc(notes)}">${notes}</span>`:''}
+      </div>`;
+    }).join('')}
+  </div>
+  ${nav('history')}`;
 }
 
-function esc(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function esc(s) { return s.replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
 // ── EXPORT ──
 function exportCSV() {
   const rows = D.checkins.map(c => [
-    c.date, c.time, c.period, c.before, c.after, c.before - c.after,
-    `"${(c.song || '').replace(/"/g, '""')}"`,
-    `"${(c.touch || '').replace(/"/g, '""')}"`,
-    `"${(c.comment || '').replace(/"/g, '""')}"`
+    c.date, c.time, c.period, c.before, c.after, c.before-c.after,
+    `"${(c.song||'').replace(/"/g,'""')}"`,
+    `"${(c.touch||'').replace(/"/g,'""')}"`,
+    `"${(c.comment||'').replace(/"/g,'""')}"`
   ].join(','));
   const csv = 'Date,Time,Period,Before,After,Reduction,Song,Touch Techniques,Notes\n' + rows.join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
+  const blob = new Blob([csv],{type:'text/csv'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'progress-data.csv'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='progress-data.csv'; a.click();
   URL.revokeObjectURL(url);
   showToast('✅ CSV exported! Send this file to your coach.');
 }
 
 function showToast(msg) {
-  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2100);
+  setTimeout(()=>t.remove(), 2100);
 }
 
 function backupData() {
-  const blob = new Blob([JSON.stringify(D, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(D, null, 2)], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url;
   a.download = 'progress-tracker-backup-' + ts() + '.json'; a.click();
@@ -540,7 +500,7 @@ function restoreData(input) {
     try {
       const json = JSON.parse(e.target.result);
       if (!json.checkins || !json.streak) throw new Error('Invalid file');
-      if (!confirm('Restore ' + json.checkins.length + ' check-ins and a ' + (json.streak.current || 0) + '-day streak? This replaces all current data.')) return;
+      if (!confirm('Restore ' + json.checkins.length + ' check-ins and a ' + (json.streak.current||0) + '-day streak? This replaces all current data.')) return;
       D = json; save(); showToast('✅ Data restored!'); r('dashboard');
     } catch(err) {
       showToast('❌ Invalid backup file. Please try again.');
@@ -551,25 +511,28 @@ function restoreData(input) {
 }
 
 // ── ACTIONS ──
-function start() { pending = { before: null }; r('before'); }
-function doBefore() { pending.before = parseInt(document.getElementById('beforeSlider').value); r('after'); }
-function doAfter() { const a = parseInt(document.getElementById('afterSlider').value); r('notes', { after: a }); }
+function start() { pending={before:null}; r('before'); }
+function doBefore() { pending.before=parseInt(document.getElementById('beforeSlider').value); r('after'); }
+function doAfter() { const a=parseInt(document.getElementById('afterSlider').value); r('notes',{after:a}); }
+
 function doSave() {
-  const song = (document.getElementById('songInput')?.value || '').trim();
+  const song = (document.getElementById('songInput')?.value||'').trim();
   const touchPills = document.querySelectorAll('#touchGroup .pill.selected');
-  const touch = Array.from(touchPills).map(p => p.dataset.touch).join(', ');
-  const comment = (document.getElementById('commentInput')?.value || '').trim();
+  const touch = Array.from(touchPills).map(p=>p.dataset.touch).join(', ');
+  const comment = (document.getElementById('commentInput')?.value||'').trim();
   const after = pending.after;
+
   const entry = {
     id: Date.now().toString(),
     date: ts(), time: now(), period: period(),
     before: pending.before, after: after,
     song, touch, comment
   };
+
   D.checkins.push(entry);
   updStreak(ts());
   save();
-  r('result', { ...entry });
+  r('result', {...entry});
 }
 
 // ── INIT ──
