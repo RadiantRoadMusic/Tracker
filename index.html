@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Progress Tracker</title>
+<title>Radiant Road Music - Progress Tracker</title>
 <style>
 :root {
   --bg: #0f0f15; --card: #1a1a26; --card-hover: #1f1f2e;
@@ -260,7 +260,7 @@ function homeUI() {
   const todayC = D.checkins.filter(c=>c.date===today).length;
   const emoji = period()==='Morning'?'🌅':period()==='Afternoon'?'☀️':'🌙';
   return `
-  <div class="top-nav fade-in"><h1>Progress Tracker</h1><div class="streak-pill">🔥 ${s.current} day streak</div></div>
+  <div class="top-nav fade-in"><h1>Radiant Road Music - Progress Tracker</h1><div class="streak-pill">🔥 ${s.current} day streak</div></div>
   <div class="spacer" style="flex:1;"></div>
   <div class="card checkin-prompt fade-in">
     <div class="time-badge">${emoji} ${period()} Check-in</div>
@@ -487,7 +487,7 @@ function backupData() {
   const blob = new Blob([JSON.stringify(D, null, 2)], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url;
-  a.download = 'progress-tracker-backup-' + ts() + '.json'; a.click();
+  a.download = 'RadiantRoadMusic-progress-tracker-backup-' + ts() + '.json'; a.click();
   URL.revokeObjectURL(url);
   showToast('💾 Backup saved! Keep this file safe.');
 }
