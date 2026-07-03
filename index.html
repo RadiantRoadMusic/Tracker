@@ -58,8 +58,6 @@
             flex-direction: column;
             position: relative;
         }
-
-        /* ── Brand Header ── */
         .brand-header {
             display: flex;
             align-items: center;
@@ -113,8 +111,6 @@
             margin-left: auto;
             flex-shrink: 0;
         }
-
-        /* ── Top Nav (for non-home screens) ── */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -126,7 +122,6 @@
             font-weight: 700;
             letter-spacing: -0.3px;
         }
-
         .card {
             background: var(--card);
             border-radius: var(--radius);
@@ -142,8 +137,6 @@
             margin-bottom: 12px;
             font-weight: 600;
         }
-
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -198,8 +191,6 @@
         .btn-outline:active {
             background: var(--accent-soft);
         }
-
-        /* Check-in prompt */
         .checkin-prompt {
             text-align: center;
             padding: 26px 20px;
@@ -223,8 +214,6 @@
             font-size: 0.88rem;
             margin-bottom: 20px;
         }
-
-        /* Slider */
         .rating-section {
             text-align: center;
             padding: 8px 0;
@@ -276,8 +265,6 @@
             color: var(--text-muted);
             margin-top: 6px;
         }
-
-        /* Result */
         .result-card {
             text-align: center;
             padding: 28px 20px;
@@ -322,8 +309,6 @@
             color: var(--text-muted);
             align-self: center;
         }
-
-        /* Session notes */
         .input-field {
             width: 100%;
             background: rgba(255, 255, 255, 0.04);
@@ -362,8 +347,6 @@
             outline: none;
             border-color: var(--accent);
         }
-
-        /* Touch technique pills */
         .pill-group {
             display: flex;
             flex-wrap: wrap;
@@ -393,8 +376,6 @@
             border-color: var(--accent-medium);
             color: var(--accent-glow);
         }
-
-        /* Dashboard */
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -424,7 +405,6 @@
             color: var(--accent-glow);
             margin-top: 2px;
         }
-
         .chart-container {
             margin-top: 4px;
         }
@@ -471,7 +451,6 @@
             font-weight: 700;
             color: rgba(0, 0, 0, 0.55);
         }
-
         .weekly-card {
             background: var(--accent-soft);
             border: 1px solid var(--accent-medium);
@@ -485,7 +464,6 @@
             color: var(--accent-glow);
             font-weight: 600;
         }
-
         .reminder-card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: var(--radius-sm);
@@ -498,7 +476,6 @@
             color: var(--text-muted);
             line-height: 1.5;
         }
-
         .empty-state {
             text-align: center;
             padding: 32px 20px;
@@ -511,8 +488,6 @@
         .empty-state p {
             font-size: 0.88rem;
         }
-
-        /* History */
         .history-item {
             display: flex;
             align-items: center;
@@ -570,8 +545,6 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 90px;
@@ -605,8 +578,6 @@
                 opacity: 0;
             }
         }
-
-        /* Bottom nav */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -647,7 +618,6 @@
             width: 22px;
             height: 22px;
         }
-
         .spacer {
             flex: 1;
         }
@@ -679,8 +649,6 @@
             font-size: 0.78rem;
             color: var(--text-muted);
         }
-
-        /* ── Desktop-friendly adjustments ── */
         @media (min-width: 768px) {
             .app {
                 min-height: auto;
@@ -721,17 +689,20 @@
     <div class="app" id="app"></div>
 
     <script>
-        // ── DATA ──
         const STORAGE_KEY = 'nstrk_data';
         let D = load();
 
         function load() {
-            try { const r = localStorage.getItem(STORAGE_KEY);
-                if (r) return JSON.parse(r); } catch (e) {}
+            try {
+                const r = localStorage.getItem(STORAGE_KEY);
+                if (r) return JSON.parse(r);
+            } catch (e) {}
             return { checkins: [], streak: { current: 0, lastDate: null, longest: 0 } };
         }
 
-        function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(D)); } catch (e) {} }
+        function save() {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(D)); } catch (e) {}
+        }
 
         function ts() { return new Date().toISOString().split('T')[0]; }
 
@@ -765,13 +736,13 @@
             return { start: start.toISOString().split('T')[0], end: end.toISOString().split('T')[0] };
         }
 
-        // ── STATE ──
         let screen = 'home';
         let pending = { before: null };
 
-        // ── RENDER ──
-        function r(s, data) { screen = s;
-            document.getElementById('app').innerHTML = renderScreen(s, data); }
+        function r(s, data) {
+            screen = s;
+            document.getElementById('app').innerHTML = renderScreen(s, data);
+        }
 
         function renderScreen(s, d) {
             switch (s) {
@@ -803,7 +774,6 @@
           </div>`;
         }
 
-        // ── HOME ──
         function homeUI() {
             const today = ts();
             const s = D.streak;
@@ -822,7 +792,6 @@
             </div>
             <div class="streak-pill">🔥 ${s.current} day streak</div>
           </div>
-
           <div class="card checkin-prompt fade-in">
             <div class="time-badge">${emoji} ${period()} Check-in</div>
             <h2>How are you feeling?</h2>
@@ -830,13 +799,10 @@
             <button class="btn btn-primary" onclick="start()">Start Check-in</button>
             ${todayC>0?`<p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">${todayC} check-in${todayC>1?'s':''} today so far${todayC<2?' — aim for at least 2':''}</p>`:''}
           </div>
-
           <div class="reminder-card fade-in"><p>💡 Building lasting calm takes time. Small, consistent sessions build the foundation. Showing up is the win.</p></div>
-
           ${nav('home')}`;
         }
 
-        // ── BEFORE ──
         function beforeUI() {
             return `
           <div class="top-nav fade-in">
@@ -857,7 +823,6 @@
 
         function updRating(id, v) { document.getElementById(id).textContent = v; }
 
-        // ── AFTER ──
         function afterUI() {
             return `
           <div class="top-nav fade-in">
@@ -879,7 +844,6 @@
           ${nav('checkin')}`;
         }
 
-        // ── NOTES ──
         function notesUI(d) {
             pending.after = d.after;
             return `
@@ -913,9 +877,8 @@
 
         function togglePill(el) { el.classList.toggle('selected'); }
 
-        // ── RESULT ──
         function resultUI(d) {
-            const { before, after, id, song, touch, comment } = d;
+            const { before, after, song, touch, comment } = d;
             const reduction = before - after;
             const cls = reduction > 0 ? 'reduced' : 'neutral';
             let msg, emoji;
@@ -947,7 +910,6 @@
           ${nav('home')}`;
         }
 
-        // ── DASHBOARD ──
         function dashUI() {
             const today = ts();
             const s = D.streak;
@@ -958,7 +920,6 @@
             const wkReductions = wkC.filter(c => c.before > c.after);
             const avgR = wkC.length > 0 ? (wkC.reduce((a, c) => a + (c.before - c.after), 0) / wkC.length).toFixed(1) : '—';
             const total = all.length;
-            const wkPct = wkC.length >= 14 ? 100 : Math.round(wkC.length / 14 * 100);
 
             let wkMsg = '';
             if (wkC.length >= 14) wkMsg = '🎉 Amazing! You hit your 14 check-in target this week. Your nervous system thanks you!';
@@ -969,7 +930,6 @@
             else if (wkC.length > 0) wkMsg = `🌱 Just getting started this week. Every check-in builds the habit.`;
             else wkMsg = 'A new week begins. Aim for at least 2 check-ins a day — your nervous system will thank you.';
 
-            // last 7 days chart
             const last7 = [];
             for (let i = 6; i >= 0; i--) {
                 const d = new Date();
@@ -1010,7 +970,6 @@
           ${nav('dashboard')}`;
         }
 
-        // ── HISTORY ──
         function histUI() {
             const list = [...D.checkins].reverse();
             return `
@@ -1040,7 +999,6 @@
 
         function esc(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
 
-        // ── EXPORT ──
         function exportCSV() {
             const rows = D.checkins.map(c => [
                 c.date, c.time, c.period, c.before, c.after, c.before - c.after,
@@ -1078,6 +1036,9 @@
             showToast('💾 Backup saved! Keep this file safe.');
         }
 
+        // ═══════════════════════════════════════════════════════════════
+        //  FIXED RESTORE – completely replaces data and reloads page
+        // ═══════════════════════════════════════════════════════════════
         function restoreData(input) {
             const file = input.files[0];
             if (!file) return;
@@ -1085,22 +1046,34 @@
             reader.onload = function(e) {
                 try {
                     const json = JSON.parse(e.target.result);
-                    if (!json.checkins || !json.streak) throw new Error('Invalid file');
-                    if (!confirm('Restore ' + json.checkins.length + ' check-ins and a ' + (json.streak.current || 0) +
-                            '-day streak? This replaces all current data.')) return;
+                    if (!json.checkins || !json.streak) {
+                        throw new Error('Missing required fields (checkins, streak)');
+                    }
+                    if (!confirm(
+                            'Restore ' + json.checkins.length + ' check-ins with a ' + (json.streak.current || 0) +
+                            '-day streak? This will replace ALL current data.')) {
+                        input.value = '';
+                        return;
+                    }
+
+                    // Replace global data, save to localStorage, then force a full page reload
+                    // to ensure no stale state remains in memory.
                     D = json;
                     save();
-                    showToast('✅ Data restored!');
-                    r('dashboard');
+                    showToast('✅ Data restored successfully! Reloading…');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 400);
+
                 } catch (err) {
-                    showToast('❌ Invalid backup file. Please try again.');
+                    showToast('❌ Invalid backup file: ' + err.message);
+                    input.value = '';
                 }
             };
             reader.readAsText(file);
-            input.value = '';
+            input.value = ''; // clear input so same file can be selected again
         }
 
-        // ── ACTIONS ──
         function start() { pending = { before: null };
             r('before'); }
 
@@ -1132,10 +1105,9 @@
             D.checkins.push(entry);
             updStreak(ts());
             save();
-            r('result', {...entry });
+            r('result', { ...entry });
         }
 
-        // ── INIT ──
         r('home');
     </script>
 </body>
