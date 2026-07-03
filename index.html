@@ -1025,8 +1025,13 @@
             setTimeout(() => t.remove(), 2100);
         }
 
+        // ═══════════════════════════════════════════════════════════════
+        //  FIXED BACKUP – creates a clean copy of data before export
+        // ═══════════════════════════════════════════════════════════════
         function backupData() {
-            const blob = new Blob([JSON.stringify(D, null, 2)], { type: 'application/json' });
+            // Create a deep clone of the data to avoid any reference issues
+            const dataClone = JSON.parse(JSON.stringify(D));
+            const blob = new Blob([JSON.stringify(dataClone, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -1037,7 +1042,7 @@
         }
 
         // ═══════════════════════════════════════════════════════════════
-        //  FIXED RESTORE – completely replaces data and reloads page
+        //  FIXED RESTORE – validates, saves, then reloads the page
         // ═══════════════════════════════════════════════════════════════
         function restoreData(input) {
             const file = input.files[0];
@@ -1055,23 +1060,20 @@
                         input.value = '';
                         return;
                     }
-
-                    // Replace global data, save to localStorage, then force a full page reload
-                    // to ensure no stale state remains in memory.
+                    // Replace data and save to localStorage
                     D = json;
                     save();
-                    showToast('✅ Data restored successfully! Reloading…');
+                    showToast('✅ Data restored! Reloading…');
                     setTimeout(() => {
                         location.reload();
-                    }, 400);
-
+                    }, 500);
                 } catch (err) {
                     showToast('❌ Invalid backup file: ' + err.message);
                     input.value = '';
                 }
             };
             reader.readAsText(file);
-            input.value = ''; // clear input so same file can be selected again
+            input.value = '';
         }
 
         function start() { pending = { before: null };
