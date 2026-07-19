@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Radiant Road Music — Progress Tracker</title>
+    <title>Radiant Road Music — Sanctuary Check In</title>
     <style>
         :root {
             --bg: #0f0f15;
@@ -819,7 +819,7 @@
             </div>
             <div class="brand-text">
               <div class="brand-name">Radiant Road Music</div>
-              <div class="brand-sub">Progress Tracker</div>
+              <div class="brand-sub">Sanctuary Check In</div>
             </div>
             <div class="streak-pill">🔥 ${s.current} day streak</div>
           </div>
@@ -1043,7 +1043,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'progress-data.csv';
+            a.download = 'sanctuary-check-in-data.csv';
             a.click();
             URL.revokeObjectURL(url);
             showToast('✅ CSV exported! Send this file to your coach.');
@@ -1063,7 +1063,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'progress-tracker-backup-' + ts() + '.json';
+            a.download = 'sanctuary-check-in-backup-' + ts() + '.json';
             a.click();
             URL.revokeObjectURL(url);
             showToast('💾 Backup saved! Keep this file safe.');
