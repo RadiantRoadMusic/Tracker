@@ -3136,5 +3136,111 @@
 
         r('home');
     </script>
+
+    <!-- Dynamic iframe height bridge. Safe to keep when this page is opened directly. -->
+    <script>
+        (() => {
+            const MESSAGE_TYPE = 'sanctuary-tracker-resize';
+            const appRoot = document.getElementById('app');
+
+            if (!appRoot || window.parent === window) return;
+
+            let frameId = 0;
+            let lastHeight = 0;
+            let lastMode = '';
+            let measuring = false;
+
+            function restoreInlineStyle(element, previousStyle) {
+                if (previousStyle === null) {
+                    element.removeAttribute('style');
+                } else {
+                    element.setAttribute('style', previousStyle);
+                }
+            }
+
+            function measureNaturalHeight() {
+                const body = document.body;
+                const html = document.documentElement;
+                if (!body || !html) return 0;
+
+                measuring = true;
+                const bodyStyle = body.getAttribute('style');
+                const appStyle = appRoot.getAttribute('style');
+
+                // The main Tracker screens intentionally use 100dvh. Temporarily remove
+                // that viewport lock while measuring so the parent iframe can also shrink.
+                body.style.height = 'auto';
+                body.style.minHeight = '0';
+                body.style.overflowY = 'visible';
+                appRoot.style.height = 'auto';
+                appRoot.style.minHeight = '0';
+                appRoot.style.overflow = 'visible';
+
+                const height = Math.ceil(Math.max(
+                    html.scrollHeight,
+                    body.scrollHeight,
+                    body.offsetHeight,
+                    appRoot.scrollHeight,
+                    appRoot.offsetHeight,
+                    appRoot.getBoundingClientRect().height
+                ));
+
+                restoreInlineStyle(appRoot, appStyle);
+                restoreInlineStyle(body, bodyStyle);
+                measuring = false;
+                return height;
+            }
+
+            function postHeight() {
+                frameId = 0;
+                if (measuring) return;
+
+                const height = measureNaturalHeight();
+                if (!height) return;
+
+                const mode = document.body.classList.contains('lock-scroll') ? 'app' : 'content';
+                if (height === lastHeight && mode === lastMode) return;
+
+                lastHeight = height;
+                lastMode = mode;
+
+                // Only non-sensitive layout information is sent. The embedding page should
+                // still validate event.origin and event.source before accepting this message.
+                window.parent.postMessage({
+                    type: MESSAGE_TYPE,
+                    height,
+                    mode
+                }, '*');
+            }
+
+            function scheduleHeightUpdate() {
+                if (measuring) return;
+                if (frameId) cancelAnimationFrame(frameId);
+                frameId = requestAnimationFrame(() => {
+                    requestAnimationFrame(postHeight);
+                });
+            }
+
+            if ('ResizeObserver' in window) {
+                const resizeObserver = new ResizeObserver(scheduleHeightUpdate);
+                resizeObserver.observe(appRoot);
+            }
+
+            const mutationObserver = new MutationObserver(scheduleHeightUpdate);
+            mutationObserver.observe(appRoot, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+
+            window.addEventListener('load', scheduleHeightUpdate);
+            window.addEventListener('resize', scheduleHeightUpdate, { passive: true });
+            window.addEventListener('orientationchange', scheduleHeightUpdate, { passive: true });
+            document.addEventListener('input', scheduleHeightUpdate, { passive: true });
+            document.addEventListener('transitionend', scheduleHeightUpdate, { passive: true });
+
+            scheduleHeightUpdate();
+        })();
+    </script>
 </body>
 </html>
