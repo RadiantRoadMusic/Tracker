@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Sanctuary Check In</title>
@@ -12,21 +12,20 @@
             --card: #1a1a26;
             --card-hover: #1f1f2e;
             --accent: #048500;
-            --accent-glow: #588008;
-            --accent-soft: rgba(124, 92, 252, 0.15);
-            --accent-medium: rgba(124, 92, 252, 0.30);
+            --accent-glow: #9ac65c;
+            --accent-soft: rgba(4, 133, 0, 0.15);
+            --accent-medium: rgba(4, 133, 0, 0.30);
             --text: #e8e8f2;
-            --text-secondary: #b0b0c0;
-            --text-muted: #6b6b80;
+            --text-secondary: #ffffff;
+            --text-muted: #ffffff;
             --success: #4ade80;
             --success-soft: rgba(74, 222, 128, 0.15);
             --danger: #f87171;
             --danger-soft: rgba(248, 113, 113, 0.12);
-            --warning: #fbbf24;
-            --warning-soft: rgba(251, 191, 36, 0.15);
+
             --radius: 18px;
             --radius-sm: 12px;
-            --radius-xs: 8px;
+
             --nav-height: 70px;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
@@ -46,8 +45,6 @@
             justify-content: center;
             align-items: flex-start;
             -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
         }
         .app {
             width: 100%;
@@ -73,7 +70,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 16px rgba(124, 92, 252, 0.35);
+            box-shadow: 0 4px 16px rgba(4, 133, 0, 0.35);
         }
         .brand-logo svg {
             width: 26px;
@@ -92,13 +89,8 @@
             color: var(--text);
             line-height: 1.2;
         }
-        .brand-text .brand-sub {
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: 0.3px;
-        }
-        .streak-pill {
+
+.streak-pill {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -148,7 +140,7 @@
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: transform 0.2s, background-color 0.2s, border-color 0.2s, color 0.2s;
             font-family: inherit;
         }
         .btn-primary {
@@ -156,7 +148,7 @@
             color: #fff;
             width: 100%;
             max-width: none;
-            box-shadow: 0 4px 20px rgba(124, 92, 252, 0.3);
+            box-shadow: 0 4px 20px rgba(4, 133, 0, 0.3);
         }
         .btn-primary:active {
             transform: scale(0.97);
@@ -232,15 +224,8 @@
             color: var(--accent-glow);
             transition: color 0.2s;
         }
-        .rating-context {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-        .slider-container {
-            padding: 0 8px;
-        }
-        .slider-container input[type="range"] {
+
+.slider-container input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
             height: 8px;
@@ -258,14 +243,8 @@
             cursor: pointer;
             box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
         }
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
-        .result-card {
+
+.result-card {
             text-align: center;
             padding: 28px 20px;
         }
@@ -279,6 +258,9 @@
         }
         .result-delta.neutral {
             color: var(--text-muted);
+        }
+        .result-delta.increased {
+            color: var(--danger);
         }
         .result-msg {
             font-size: 1rem;
@@ -362,7 +344,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.15s;
+            transition: transform 0.15s, background-color 0.15s, border-color 0.15s, color 0.15s;
             font-family: inherit;
             display: flex;
             align-items: center;
@@ -421,35 +403,77 @@
             text-align: right;
             flex-shrink: 0;
         }
-        .chart-bar-wrap {
+
+.change-axis {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin: 0 42px 8px 50px;
+        }
+        .change-track {
             flex: 1;
             height: 22px;
             background: rgba(255, 255, 255, 0.04);
             border-radius: 6px;
-            overflow: hidden;
             position: relative;
+            overflow: hidden;
         }
-        .chart-bar-fill {
-            height: 100%;
-            border-radius: 6px;
+        .change-zero {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.22);
+            z-index: 2;
+        }
+        .change-bar {
+            position: absolute;
+            top: 0;
+            bottom: 0;
             transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            padding-left: 8px;
         }
-        .chart-bar-fill.good {
-            background: linear-gradient(90deg, #4ade80, #22c55e);
+        .change-bar.good {
+            background: linear-gradient(90deg, #22c55e, #4ade80);
         }
-        .chart-bar-fill.ok {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-        }
-        .chart-bar-fill.low {
+        .change-bar.low {
             background: linear-gradient(90deg, #f87171, #ef4444);
         }
-        .chart-bar-num {
-            font-size: 0.68rem;
+        .change-value {
+            width: 40px;
+            text-align: right;
+            flex-shrink: 0;
+            font-size: 0.7rem;
             font-weight: 700;
-            color: rgba(0, 0, 0, 0.55);
+            color: var(--text-secondary);
+        }
+        .change-value.good {
+            color: var(--success);
+        }
+        .change-value.low {
+            color: var(--danger);
+        }
+        .change-count {
+            width: 18px;
+            text-align: right;
+            flex-shrink: 0;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+        }
+        .change-no-data {
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .chart-help {
+            margin-top: 10px;
+            font-size: 0.68rem;
+            line-height: 1.4;
+            color: var(--text-muted);
+            text-align: center;
         }
         .weekly-card {
             background: var(--accent-soft);
@@ -560,6 +584,11 @@
             box-shadow: 0 4px 20px rgba(74, 222, 128, 0.4);
             animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
         }
+        .toast.error {
+            background: var(--danger);
+            color: #111;
+            box-shadow: 0 4px 20px rgba(248, 113, 113, 0.4);
+        }
         @keyframes toastIn {
             from {
                 opacity: 0;
@@ -649,40 +678,1226 @@
             font-size: 0.78rem;
             color: var(--text-muted);
         }
-        @media (min-width: 768px) {
-            .app {
-                min-height: auto;
-                padding-top: 24px;
-                padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 24px);
-            }
-            body {
-                align-items: center;
-                padding: 40px 16px;
-            }
-            .brand-header {
-                padding-top: 0;
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
             }
         }
-        @media (max-width: 440px) {
+
+        /* ─── FLUID RESPONSIVE LAYOUT ─────────────────────────────── */
+        :root {
+            --app-max: 780px;
+            --page-pad: clamp(12px, 3.2vw, 28px);
+            --top-pad: clamp(12px, 2.5vw, 24px);
+            --card-pad: clamp(16px, 2.6vw, 24px);
+            --section-gap: clamp(10px, 1.8vw, 16px);
+            --control-height: clamp(46px, 6vw, 52px);
+            --nav-height: clamp(64px, 8vw, 74px);
+            --radius: clamp(15px, 2vw, 20px);
+            --radius-sm: clamp(11px, 1.5vw, 14px);
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        .app {
+            width: min(100%, var(--app-max));
+            max-width: var(--app-max);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding:
+                max(var(--top-pad), env(safe-area-inset-top, 0px))
+                var(--page-pad)
+                calc(var(--nav-height) + var(--safe-bottom) + clamp(18px, 3vw, 30px));
+        }
+
+        .brand-header {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: clamp(10px, 2vw, 16px);
+            padding: clamp(2px, 1vw, 8px) clamp(0px, 0.5vw, 4px) clamp(10px, 2vw, 16px);
+            min-width: 0;
+        }
+
+        .brand-logo {
+            width: clamp(42px, 6.5vw, 50px);
+            height: clamp(42px, 6.5vw, 50px);
+            border-radius: clamp(12px, 1.8vw, 15px);
+        }
+
+        .brand-logo svg {
+            width: clamp(22px, 3.5vw, 27px);
+            height: clamp(22px, 3.5vw, 27px);
+        }
+
+        .brand-text {
+            min-width: 0;
+            align-self: center;
+        }
+
+        .brand-text .brand-name {
+            font-size: clamp(1.02rem, 1.5vw + 0.72rem, 1.28rem);
+            overflow-wrap: anywhere;
+        }
+
+.streak-pill {
+            gap: clamp(4px, 1vw, 7px);
+            padding: clamp(6px, 1vw, 8px) clamp(10px, 1.8vw, 15px);
+            font-size: clamp(0.74rem, 0.5vw + 0.65rem, 0.86rem);
+            white-space: nowrap;
+            align-self: center;
+        }
+
+        .top-nav {
+            gap: clamp(8px, 1.7vw, 14px);
+            padding: clamp(5px, 1vw, 9px) clamp(0px, 0.5vw, 4px) clamp(12px, 2vw, 18px);
+            min-width: 0;
+        }
+
+        .top-nav h1 {
+            font-size: clamp(1.18rem, 1.15vw + 0.95rem, 1.5rem);
+            line-height: 1.2;
+            min-width: 0;
+        }
+
+        .card {
+            padding: var(--card-pad);
+            margin-bottom: var(--section-gap);
+        }
+
+        .card-title {
+            font-size: clamp(0.72rem, 0.22vw + 0.68rem, 0.8rem);
+            margin-bottom: clamp(10px, 1.5vw, 14px);
+        }
+
+        .btn {
+            min-height: var(--control-height);
+            padding: clamp(11px, 1.7vw, 15px) clamp(18px, 3vw, 30px);
+            border-radius: 999px;
+            font-size: clamp(0.94rem, 0.35vw + 0.88rem, 1.02rem);
+            line-height: 1.15;
+        }
+
+        .btn-sm {
+            min-height: 42px;
+            padding: clamp(9px, 1.2vw, 11px) clamp(13px, 2vw, 19px);
+            font-size: clamp(0.8rem, 0.3vw + 0.75rem, 0.88rem);
+        }
+
+        .btn-ghost {
+            padding-inline: clamp(10px, 1.6vw, 14px);
+        }
+
+        .checkin-prompt {
+            padding: clamp(22px, 4vw, 34px) var(--card-pad);
+        }
+
+        .checkin-prompt .time-badge {
+            padding: clamp(5px, 0.8vw, 7px) clamp(11px, 1.8vw, 15px);
+            font-size: clamp(0.75rem, 0.25vw + 0.71rem, 0.8rem);
+            margin-bottom: clamp(13px, 2vw, 18px);
+        }
+
+        .checkin-prompt h2 {
+            font-size: clamp(1.18rem, 1vw + 0.98rem, 1.42rem);
+            margin-bottom: clamp(6px, 1vw, 9px);
+        }
+
+        .checkin-prompt p,
+        .empty-state p {
+            font-size: clamp(0.86rem, 0.3vw + 0.81rem, 0.94rem);
+            line-height: 1.5;
+        }
+
+        .rating-section {
+            padding: clamp(8px, 1.5vw, 14px) 0;
+        }
+
+        .rating-label {
+            padding-inline: clamp(6px, 1vw, 12px);
+            font-size: clamp(0.88rem, 0.35vw + 0.82rem, 0.96rem);
+            line-height: 1.4;
+        }
+
+        .rating-big {
+            font-size: clamp(3.4rem, 8vw, 4.5rem);
+            height: clamp(72px, 10vw, 88px);
+            line-height: clamp(72px, 10vw, 88px);
+        }
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+            width: clamp(36px, 5vw, 40px);
+            height: clamp(36px, 5vw, 40px);
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: clamp(36px, 5vw, 40px);
+            height: clamp(36px, 5vw, 40px);
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+        }
+
+@media (max-width: 360px) {
+
+}
+
+        .result-card {
+            padding: clamp(24px, 4vw, 36px) var(--card-pad);
+        }
+
+        .result-before-after {
+            gap: clamp(20px, 5vw, 42px);
+            margin: clamp(14px, 2.5vw, 20px) 0;
+        }
+
+        .result-delta {
+            font-size: clamp(2.35rem, 5vw, 3.1rem);
+        }
+
+        .result-msg {
+            font-size: clamp(0.95rem, 0.38vw + 0.88rem, 1.04rem);
+        }
+
+        .input-field,
+        .comment-area {
+            padding: clamp(13px, 1.8vw, 16px);
+            font-size: clamp(1rem, 0.25vw + 0.96rem, 1.05rem);
+            line-height: 1.4;
+        }
+
+        .comment-area {
+            min-height: clamp(92px, 13vw, 118px);
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: clamp(0.78rem, 0.25vw + 0.73rem, 0.84rem);
+            line-height: 1.35;
+            color: var(--text-muted);
+        }
+
+        .pill-group {
+            gap: clamp(7px, 1.2vw, 10px);
+            margin-bottom: clamp(14px, 2vw, 18px);
+        }
+
+        .pill {
+            min-height: 44px;
+            padding: clamp(9px, 1.3vw, 11px) clamp(14px, 2.2vw, 19px);
+            font-size: clamp(0.82rem, 0.25vw + 0.78rem, 0.88rem);
+        }
+
+        .action-row {
+            display: flex;
+            gap: clamp(8px, 1.4vw, 12px);
+            margin-top: 10px;
+        }
+
+        .action-row > .btn {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+
+        .stat-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(9px, 1.6vw, 13px);
+        }
+
+        .stat-card {
+            padding: clamp(14px, 2.3vw, 20px) clamp(10px, 1.7vw, 16px);
+        }
+
+        .stat-value {
+            font-size: clamp(1.35rem, 1.8vw + 1rem, 1.75rem);
+        }
+
+        .stat-label {
+            font-size: clamp(0.67rem, 0.2vw + 0.64rem, 0.73rem);
+            line-height: 1.25;
+        }
+
+        .stat-sub {
+            font-size: clamp(0.69rem, 0.2vw + 0.66rem, 0.76rem);
+            line-height: 1.3;
+        }
+
+        .weekly-card,
+        .reminder-card {
+            padding: clamp(13px, 2vw, 17px) clamp(14px, 2.3vw, 20px);
+        }
+
+        .weekly-card .msg {
+            font-size: clamp(0.84rem, 0.3vw + 0.79rem, 0.92rem);
+            line-height: 1.45;
+        }
+
+        .reminder-card p {
+            font-size: clamp(0.78rem, 0.3vw + 0.73rem, 0.86rem);
+        }
+
+        .chart-bar-row {
+            gap: clamp(6px, 1.2vw, 10px);
+        }
+
+        .chart-date {
+            width: clamp(38px, 6vw, 50px);
+            font-size: clamp(0.68rem, 0.2vw + 0.65rem, 0.74rem);
+        }
+
+        .change-axis {
+            font-size: clamp(0.61rem, 0.2vw + 0.58rem, 0.68rem);
+            margin-left: clamp(44px, 7vw, 58px);
+            margin-right: clamp(50px, 8vw, 66px);
+        }
+
+        .change-value {
+            width: clamp(36px, 5.5vw, 46px);
+        }
+
+        .scroll-area {
+            max-height: min(64dvh, 650px);
+            padding-bottom: 2px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.16) transparent;
+        }
+
+        .history-item {
+            gap: clamp(8px, 1.4vw, 12px);
+            padding: clamp(11px, 1.7vw, 14px) clamp(12px, 2vw, 16px);
+        }
+
+        .history-time {
+            min-width: clamp(48px, 7vw, 62px);
+            font-size: clamp(0.67rem, 0.2vw + 0.64rem, 0.73rem);
+        }
+
+        .history-scores {
+            min-width: 0;
+            gap: clamp(6px, 1.2vw, 9px);
+        }
+
+        .history-notes {
+            max-width: clamp(90px, 22vw, 220px);
+        }
+
+        .toast {
+            bottom: calc(var(--nav-height) + var(--safe-bottom) + 14px);
+            width: max-content;
+            max-width: min(90vw, 520px);
+            padding: clamp(10px, 1.4vw, 12px) clamp(18px, 2.7vw, 24px);
+            text-align: center;
+            line-height: 1.35;
+        }
+
+        .bottom-nav {
+            width: min(100%, var(--app-max));
+            max-width: var(--app-max);
+            height: calc(var(--nav-height) + var(--safe-bottom));
+            padding: 0 max(4px, env(safe-area-inset-left, 0px)) var(--safe-bottom) max(4px, env(safe-area-inset-right, 0px));
+        }
+
+        .nav-btn {
+            flex: 1 1 0;
+            min-width: 0;
+            min-height: 50px;
+            gap: clamp(2px, 0.6vw, 5px);
+            padding: clamp(7px, 1vw, 9px) clamp(4px, 1.5vw, 14px);
+            font-size: clamp(0.64rem, 0.25vw + 0.6rem, 0.72rem);
+        }
+
+        .step-indicator {
+            font-size: clamp(0.73rem, 0.24vw + 0.69rem, 0.8rem);
+            white-space: nowrap;
+        }
+
+        .visually-hidden-file {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        @media (min-width: 680px) {
+            body {
+                align-items: flex-start;
+                padding: 0;
+            }
+
+            .app {
+                padding-top: clamp(24px, 4vh, 46px);
+            }
+
+            .stat-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+
+            .history-notes {
+                max-width: min(34vw, 280px);
+            }
+        }
+
+        @media (min-width: 980px) {
+            .app {
+                padding-top: clamp(34px, 5vh, 58px);
+                padding-left: clamp(28px, 3vw, 38px);
+                padding-right: clamp(28px, 3vw, 38px);
+            }
+
+            .card,
+            .stat-card,
+            .weekly-card,
+            .reminder-card,
+            .history-item {
+                border-color: rgba(255, 255, 255, 0.055);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .dashboard-nav {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                align-items: stretch;
+            }
+
+            .dashboard-nav h1 {
+                grid-column: 1 / -1;
+            }
+
+            .dashboard-nav .btn {
+                width: 100%;
+                padding-inline: 8px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .brand-header {
+                grid-template-columns: auto minmax(0, 1fr);
+            }
+
+            .streak-pill {
+                grid-column: 1 / -1;
+                margin-left: 0;
+                justify-self: start;
+            }
+
+            .action-row {
+                flex-direction: column;
+            }
+
+            .action-row > .btn {
+                width: 100%;
+            }
+
+            .result-before-after {
+                gap: 18px;
+            }
+
+            .ra-label {
+                font-size: 0.65rem;
+            }
+
+            .history-item {
+                flex-wrap: wrap;
+            }
+
+            .history-notes {
+                flex-basis: 100%;
+                max-width: none;
+                margin-left: 0;
+                text-align: left;
+                padding-left: calc(clamp(48px, 7vw, 62px) + 8px);
+            }
+        }
+
+        @media (max-width: 330px) {
+            :root {
+                --page-pad: 10px;
+            }
+
+            .dashboard-nav {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-nav h1 {
+                grid-column: 1;
+            }
+
+            .streak-pill {
+                white-space: normal;
+            }
+
+        }
+
+        /* Small-screen refinements after visual breakpoint testing. */
+        .scroll-area {
+            max-height: min(64vh, 650px);
+            max-height: min(64dvh, 650px);
+        }
+
+        @media (min-width: 351px) and (max-width: 390px) {
+            .brand-header {
+                grid-template-columns: auto minmax(0, 1fr) auto;
+            }
+
+            .streak-pill {
+                grid-column: auto;
+                margin-left: auto;
+                justify-self: auto;
+            }
+        }
+
+        @media (max-width: 330px) {
+            .dashboard-nav {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .dashboard-nav h1 {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* ─── VIEWPORT-HEIGHT FIT / APP-LIKE NO-SCROLL SCREENS ───── */
+        body.lock-scroll {
+            height: 100vh;
+            height: 100dvh;
+            overflow-y: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        .app.screen-home,
+        .app.screen-before,
+        .app.screen-after,
+        .app.screen-result {
+            height: 100vh;
+            height: 100dvh;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .screen-home .brand-header,
+        .screen-home .weekly-card,
+        .screen-home .checkin-prompt,
+        .screen-home .reminder-card,
+        .screen-before .top-nav,
+        .screen-before .card,
+        .screen-before > .btn,
+        .screen-after .top-nav,
+        .screen-after .card,
+        .screen-after > .btn,
+        .screen-result .top-nav,
+        .screen-result .result-card,
+        .screen-result > .btn {
+            flex-shrink: 0;
+        }
+
+        .screen-before .rating-section,
+        .screen-after .rating-section {
+            padding-top: clamp(10px, 2.4vh, 22px);
+            padding-bottom: clamp(13px, 2.8vh, 24px);
+        }
+
+        .screen-before .rating-big,
+        .screen-after .rating-big {
+            font-size: clamp(3.25rem, 9vh, 4.5rem);
+            height: clamp(64px, 11vh, 88px);
+            line-height: clamp(64px, 11vh, 88px);
+        }
+
+        .screen-before > .btn-primary,
+        .screen-after > .btn-primary {
+            margin-top: clamp(4px, 1.2vh, 10px);
+        }
+
+        .result-detail,
+        .result-time {
+            color: var(--text-muted);
+        }
+
+        .result-detail {
+            font-size: clamp(0.72rem, 1.45vh, 0.8rem);
+            line-height: 1.35;
+            margin-top: 3px;
+            overflow: hidden;
+            overflow-wrap: anywhere;
+        }
+
+        .result-song,
+        .result-touch {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .result-comment {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+        }
+
+        .result-time {
+            font-size: clamp(0.66rem, 1.3vh, 0.72rem);
+            margin-top: clamp(7px, 1.4vh, 12px);
+        }
+
+        /* Keep unfinished-check-in notice compact so the normal Home card and quote remain visible. */
+        .screen-home .pending-reminder {
+            padding: clamp(8px, 1.5vh, 12px) clamp(10px, 2vw, 14px);
+            margin-bottom: clamp(6px, 1vh, 10px);
+        }
+
+        .screen-home .pending-reminder .msg {
+            font-size: clamp(0.74rem, 1.45vh, 0.84rem);
+            line-height: 1.25;
+        }
+
+        .screen-home .pending-reminder .action-row {
+            margin-top: clamp(5px, 0.9vh, 8px);
+            gap: 6px;
+        }
+
+        .screen-home .pending-reminder .btn {
+            min-height: 34px;
+            padding: 7px 10px;
+            font-size: clamp(0.72rem, 1.35vh, 0.8rem);
+        }
+
+        @media (max-height: 620px) {
+            .screen-home.has-pending .brand-header {
+                padding-bottom: 4px;
+            }
+
+            .screen-home.has-pending .pending-reminder {
+                padding-top: 6px;
+                padding-bottom: 6px;
+                margin-bottom: 5px;
+            }
+
+            .screen-home.has-pending .pending-reminder .msg {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .screen-home.has-pending .checkin-prompt {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                margin-bottom: 6px;
+            }
+
+            .screen-home.has-pending .checkin-prompt .time-badge {
+                margin-bottom: 7px;
+            }
+
+            .screen-home.has-pending .checkin-prompt p {
+                margin-bottom: 10px;
+            }
+
+            .screen-home.has-pending .reminder-card {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                margin-top: 5px;
+            }
+        }
+
+        @media (max-height: 520px) {
+            /* Backup remains available on Progress; on very short screens keep Home focused on the primary action. */
+            .screen-home .backup-reminder {
+                display: none;
+            }
+        }
+
+        /* Height-aware compaction: keeps primary flow screens inside short phones. */
+        @media (max-height: 760px) {
+            :root {
+                --top-pad: clamp(8px, 1.5vh, 12px);
+                --card-pad: clamp(14px, 2.2vh, 18px);
+                --section-gap: clamp(7px, 1.3vh, 10px);
+                --control-height: 44px;
+                --nav-height: 62px;
+            }
+
+            .app {
+                padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 10px);
+            }
+
+            .brand-header {
+                padding-top: 1px;
+                padding-bottom: 8px;
+            }
+
             .brand-logo {
-                width: 42px;
-                height: 42px;
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
             }
+
             .brand-logo svg {
-                width: 22px;
-                height: 22px;
+                width: 21px;
+                height: 21px;
             }
+
+            .checkin-prompt {
+                padding-top: clamp(15px, 2.6vh, 20px);
+                padding-bottom: clamp(15px, 2.6vh, 20px);
+            }
+
+            .checkin-prompt .time-badge {
+                margin-bottom: 9px;
+            }
+
+            .checkin-prompt p {
+                margin-bottom: 13px;
+            }
+
+            .weekly-card,
+            .reminder-card {
+                padding: 10px 13px;
+            }
+
+            .weekly-card .msg,
+            .reminder-card p {
+                line-height: 1.32;
+            }
+
+            .action-row {
+                margin-top: 7px;
+            }
+
+            .top-nav {
+                padding-top: 2px;
+                padding-bottom: 8px;
+            }
+
+            .screen-before .rating-section,
+            .screen-after .rating-section {
+                padding-top: 8px;
+                padding-bottom: 12px;
+            }
+
+            .screen-before .rating-big,
+            .screen-after .rating-big {
+                font-size: 3.35rem;
+                height: 62px;
+                line-height: 62px;
+            }
+
+            .screen-result .top-nav {
+                padding-bottom: 7px;
+            }
+
+            .screen-result .result-card {
+                padding-top: 16px;
+                padding-bottom: 16px;
+                margin-bottom: 8px;
+            }
+
+            .screen-result .result-card > div:first-child {
+                font-size: 2.35rem !important;
+                margin-bottom: 2px !important;
+            }
+
+            .screen-result .result-before-after {
+                margin: 8px 0;
+            }
+
+            .screen-result .result-delta {
+                font-size: 2rem;
+                margin: 4px 0;
+            }
+
+            .screen-result .result-msg {
+                font-size: 0.9rem;
+                line-height: 1.35;
+            }
+        }
+
+        @media (max-height: 650px) {
+            :root {
+                --page-pad: clamp(10px, 3vw, 14px);
+                --top-pad: 7px;
+                --card-pad: 12px;
+                --section-gap: 6px;
+                --control-height: 42px;
+                --nav-height: 58px;
+            }
+
+            .app {
+                padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 7px);
+            }
+
+            .brand-header {
+                gap: 8px;
+                padding-bottom: 5px;
+            }
+
+            .brand-logo {
+                width: 36px;
+                height: 36px;
+            }
+
             .brand-text .brand-name {
-                font-size: 1.05rem;
+                font-size: 0.98rem;
             }
-            .brand-text .brand-sub {
+
+            .streak-pill {
+                padding: 4px 9px;
                 font-size: 0.7rem;
             }
-            .streak-pill {
-                font-size: 0.75rem;
-                padding: 5px 11px;
+
+            .checkin-prompt {
+                padding-top: 11px;
+                padding-bottom: 11px;
+            }
+
+            .checkin-prompt .time-badge {
+                margin-bottom: 6px;
+                padding-top: 4px;
+                padding-bottom: 4px;
+            }
+
+            .checkin-prompt h2 {
+                font-size: 1.1rem;
+                margin-bottom: 3px;
+            }
+
+            .checkin-prompt p {
+                font-size: 0.8rem;
+                line-height: 1.35;
+                margin-bottom: 9px;
+            }
+
+            .screen-home .reminder-card {
+                padding: 8px 10px;
+            }
+
+            .screen-home .reminder-card p {
+                font-size: 0.72rem;
+            }
+
+            .top-nav {
+                padding-bottom: 5px;
+            }
+
+            .btn {
+                padding-top: 9px;
+                padding-bottom: 9px;
+            }
+
+            .btn-sm {
+                min-height: 38px;
+                padding-top: 7px;
+                padding-bottom: 7px;
+            }
+
+            .screen-before .rating-section,
+            .screen-after .rating-section {
+                padding-top: 5px;
+                padding-bottom: 9px;
+            }
+
+            .screen-before .rating-big,
+            .screen-after .rating-big {
+                font-size: 3rem;
+                height: 54px;
+                line-height: 54px;
+            }
+
+            .rating-label {
+                font-size: 0.82rem;
+                line-height: 1.3;
+            }
+
+.screen-after > .card:first-of-type {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                margin-bottom: 5px !important;
+            }
+
+            .screen-result .result-card {
+                padding: 11px 12px;
+                margin-bottom: 6px;
+            }
+
+            .screen-result .result-card > div:first-child {
+                font-size: 2rem !important;
+            }
+
+            .screen-result .result-before-after {
+                margin: 5px 0;
+            }
+
+            .screen-result .ra-val {
+                font-size: 1.25rem;
+            }
+
+            .screen-result .result-delta {
+                font-size: 1.65rem;
+                margin: 2px 0;
+            }
+
+            .screen-result .result-msg {
+                font-size: 0.82rem;
+                line-height: 1.28;
+            }
+
+            .screen-result > .btn {
+                min-height: 40px;
+            }
+
+            .result-comment {
+                -webkit-line-clamp: 1;
+                line-clamp: 1;
             }
         }
+
+        /* ─── FINAL AUDIT FIXES ─────────────────────────────────────── */
+        .btn:focus-visible,
+        .pill:focus-visible,
+        .nav-btn:focus-visible,
+        input[type="range"]:focus-visible,
+        .input-field:focus-visible,
+        .comment-area:focus-visible {
+            outline: 3px solid rgba(154, 198, 92, 0.75);
+            outline-offset: 3px;
+        }
+
+        .comment-area {
+            max-height: min(40dvh, 320px);
+            overflow-y: auto;
+        }
+
+        /* Keep the two unfinished-check-in choices compact but comfortably tappable. */
+        .screen-home .pending-reminder .action-row {
+            flex-direction: row;
+        }
+        .screen-home .pending-reminder .btn {
+            min-height: 44px;
+        }
+
+        .confirm-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: grid;
+            place-items: center;
+            padding: max(18px, env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+            background: rgba(0, 0, 0, 0.68);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .confirm-dialog {
+            width: min(100%, 460px);
+            max-height: min(86dvh, 620px);
+            overflow-y: auto;
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: var(--radius);
+            padding: clamp(20px, 4vw, 28px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .confirm-dialog h2 {
+            font-size: clamp(1.15rem, 2vw, 1.35rem);
+            margin-bottom: 10px;
+        }
+
+        .confirm-dialog p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .confirm-actions .btn {
+            flex: 1 1 0;
+        }
+
+        .btn-danger {
+            background: #b42323;
+        }
+        .btn-danger:active {
+            background: #8f1c1c;
+        }
+
+        @media (max-width: 360px) {
+            .confirm-actions {
+                flex-direction: column-reverse;
+            }
+        }
+
+        /* On exceptionally short landscape/tiny viewports, never hide controls just to preserve
+           the app-like fit. Normal phone/tablet/desktop heights remain no-scroll. */
+        @media (max-height: 460px) {
+            body.lock-scroll {
+                height: auto;
+                min-height: 100dvh;
+                overflow-y: auto;
+                overscroll-behavior-y: auto;
+            }
+            .app.screen-home,
+            .app.screen-before,
+            .app.screen-after,
+            .app.screen-result {
+                height: auto;
+                min-height: 100dvh;
+                overflow: visible;
+            }
+        }
+
+        
+        .today-count {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .before-summary {
+            text-align: center;
+            margin-bottom: 8px;
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-medium);
+        }
+
+        .before-summary-text {
+            font-size: 0.78rem;
+            color: var(--accent-glow);
+        }
+
+        .optional-note {
+            font-weight: 400;
+            text-transform: none;
+        }
+
+        .field-gap {
+            margin-bottom: 16px;
+        }
+
+        .skip-notes {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .result-emoji {
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+
+        .history-date-heading {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 8px 4px 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── FINAL CONSISTENCY / VISUAL POLISH PASS ─────────────────── */
+        :root {
+            --slider-side-pad: clamp(12px, 2vw, 18px);
+            --slider-label-gap: clamp(20px, 2.7vh, 24px);
+        }
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            touch-action: manipulation;
+        }
+
+        .card,
+        .stat-card,
+        .weekly-card,
+        .reminder-card,
+        .history-item {
+            box-shadow: 0 1px 0 rgba(255,255,255,0.015);
+        }
+
+        .btn-primary {
+            box-shadow: 0 7px 22px rgba(4, 133, 0, 0.20);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .btn-primary:hover {
+                filter: brightness(1.04);
+            }
+            .btn-secondary:hover,
+            .pill:hover {
+                background-color: var(--card-hover);
+            }
+            .btn-ghost:hover,
+            .nav-btn:hover {
+                color: var(--text);
+            }
+        }
+
+        /* Shared slider geometry. Endpoint words sit directly beside their numbers,
+           while 0 / 5 / 10 remain aligned to the slider's true positions. */
+        .slider-container {
+            padding-inline: var(--slider-side-pad);
+        }
+
+        .slider-container input[type="range"] {
+            display: block;
+            margin: 0;
+        }
+
+        .slider-container input[type="range"]::-moz-range-track {
+            height: 8px;
+            border: 0;
+            border-radius: 4px;
+            background: linear-gradient(to right, #4ade80, #a3e635, #fbbf24, #f97316, #f87171);
+        }
+
+        .slider-labels {
+            position: relative;
+            display: block;
+            width: auto;
+            height: 18px;
+            margin: var(--slider-label-gap) var(--slider-side-pad) 0;
+            padding: 0;
+            font-size: clamp(0.75rem, 0.25vw + 0.71rem, 0.82rem);
+            font-weight: 600;
+            line-height: 1;
+            color: var(--text-secondary);
+        }
+
+        .scale-end {
+            position: absolute;
+            top: 50%;
+            display: flex;
+            align-items: center;
+            gap: clamp(3px, 0.6vw, 5px);
+            white-space: nowrap;
+            transform: translateY(-50%);
+        }
+
+        .scale-end-left {
+            left: 0;
+        }
+
+        .scale-end-right {
+            right: 0;
+        }
+
+        .slider-labels .scale-num {
+            color: var(--text);
+            font-size: clamp(0.88rem, 0.25vw + 0.84rem, 0.96rem);
+            font-weight: 750;
+            letter-spacing: 0;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Offset only the endpoint number visually, so its centre stays on the track endpoint
+           while the word can sit immediately beside it. */
+        .scale-end-left .scale-num {
+            transform: translateX(-50%);
+            margin-right: -0.5ch;
+        }
+
+        .scale-end-right .scale-num {
+            transform: translateX(50%);
+            margin-left: -1ch;
+        }
+
+        .slider-labels .scale-mid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+        }
+
+        .slider-labels .scale-word {
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        .history-nav {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        .history-nav .btn {
+            justify-self: start;
+        }
+
+        .history-nav h1 {
+            justify-self: center;
+            font-size: clamp(1.1rem, 1vw + 0.9rem, 1.3rem);
+            white-space: nowrap;
+        }
+
+        .history-nav-balance {
+            width: 1px;
+            justify-self: end;
+        }
+
+        .bottom-nav {
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        @media (max-width: 340px) {
+            :root {
+                --slider-side-pad: 10px;
+            }
+            .slider-labels {
+                font-size: 0.70rem;
+            }
+            .slider-labels .scale-num {
+                font-size: 0.84rem;
+            }
+        }
+
+        @media (max-height: 650px) {
+            :root {
+                --slider-label-gap: 20px;
+            }
+        }
+
+        @media (max-height: 520px) {
+            :root {
+                --slider-label-gap: 16px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -690,21 +1905,337 @@
 
     <script>
         const STORAGE_KEY = 'nstrk_data';
+        const PENDING_KEY = 'nstrk_pending';
+        const DATA_VERSION = 3;
+        const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+        const MAX_CHECKINS = 50000;
+        const MAX_RESTORE_BYTES = 10 * 1024 * 1024;
+        const VALID_SCREENS = new Set(['home', 'before', 'after', 'notes', 'result', 'dashboard', 'history']);
+        const LOCKED_SCREENS = new Set(['home', 'before', 'after', 'result']);
+        const LIVE_DATA_SCREENS = new Set(['home', 'dashboard', 'history']);
+        const TOUCH_OPTIONS = new Set(['Hands', 'Face', 'Arms', 'All of the above']);
+        const SCALE_LABELS = `<div class="slider-labels"><span class="scale-end scale-end-left"><strong class="scale-num">0</strong><span class="scale-word">😌 Calm</span></span><strong class="scale-num scale-mid">5</strong><span class="scale-end scale-end-right"><span class="scale-word">Stressed 😰</span><strong class="scale-num">10</strong></span></div>`;
+        const app = document.getElementById('app');
+
+        let lastStoredJSON = null;
+        let lastPendingJSON = null;
+        let pendingSaveTimer = null;
         let D = load();
+        let pending = loadPending();
+        let isSaving = false;
+        let currentScreen = 'home';
+        let closeActiveConfirm = null;
+
+        // ─── DATA SAFETY & NORMALIZATION ────────────────────────────
+        function isPlainObject(value) {
+            return value !== null && typeof value === 'object' && !Array.isArray(value);
+        }
+
+        function isValidDateStr(value) {
+            if (typeof value !== 'string' || !DATE_RE.test(value)) return false;
+            const [y, m, d] = value.split('-').map(Number);
+            const dt = new Date(y, m - 1, d);
+            return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
+        }
+
+        function isValidScore(value) {
+            return Number.isInteger(value) && value >= 0 && value <= 10;
+        }
+
+        function normalizeString(value, maxLength = 5000) {
+            return typeof value === 'string' ? value.slice(0, maxLength) : '';
+        }
+
+        function makeId() {
+            if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
+                return globalThis.crypto.randomUUID();
+            }
+            return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        }
+
+        function ensureUniqueCheckinIds(checkins) {
+            const seen = new Set();
+            return checkins.map((c, index) => {
+                let id = c.id || `legacy-${c.date}-${index}`;
+                if (seen.has(id)) {
+                    const base = id.slice(0, 80);
+                    let suffix = 2;
+                    while (seen.has(`${base}-dup-${suffix}`)) suffix += 1;
+                    id = `${base}-dup-${suffix}`;
+                }
+                seen.add(id);
+                return id === c.id ? c : { ...c, id };
+            });
+        }
+
+        function normalizeCreatedAt(value, date, fallbackIndex = 0) {
+            if (typeof value === 'string') {
+                const parsedMs = Date.parse(value);
+                if (Number.isFinite(parsedMs)) return new Date(parsedMs).toISOString();
+            }
+            const fallback = dateFromStr(date);
+            fallback.setHours(12, 0, 0, Math.min(Math.max(fallbackIndex, 0), 999));
+            return fallback.toISOString();
+        }
+
+        function validateCheckin(raw, fallbackIndex = 0) {
+            if (!isPlainObject(raw)) return null;
+            if (!isValidDateStr(raw.date)) return null;
+            if (!isValidScore(raw.before) || !isValidScore(raw.after)) return null;
+
+            return {
+                id: typeof raw.id === 'string' && raw.id
+                    ? raw.id.slice(0, 100)
+                    : `legacy-${raw.date}-${fallbackIndex}`,
+                createdAt: normalizeCreatedAt(raw.createdAt, raw.date, fallbackIndex),
+                date: raw.date,
+                time: normalizeString(raw.time, 40),
+                period: normalizeString(raw.period, 20),
+                before: raw.before,
+                after: raw.after,
+                song: normalizeString(raw.song, 300),
+                touch: normalizeString(raw.touch, 300),
+                comment: normalizeString(raw.comment, 5000)
+            };
+        }
+
+        function sortCheckins(checkins) {
+            return [...checkins].sort((a, b) => {
+                const parsedA = Date.parse(a.createdAt || '');
+                const parsedB = Date.parse(b.createdAt || '');
+                const ta = Number.isFinite(parsedA) ? parsedA : dateFromStr(a.date).getTime();
+                const tb = Number.isFinite(parsedB) ? parsedB : dateFromStr(b.date).getTime();
+                if (ta !== tb) return ta - tb;
+                return String(a.id).localeCompare(String(b.id));
+            });
+        }
+
+        function calculateStreak(checkins) {
+            const today = localDateStr();
+            const uniqueDates = [...new Set(checkins.map(c => c.date).filter(d => isValidDateStr(d) && d <= today))].sort();
+            if (uniqueDates.length === 0) {
+                return { current: 0, lastDate: null, longest: 0 };
+            }
+
+            let longest = 1;
+            let run = 1;
+            for (let i = 1; i < uniqueDates.length; i++) {
+                const prev = dateFromStr(uniqueDates[i - 1]);
+                const curr = dateFromStr(uniqueDates[i]);
+                const diff = calendarDayDiff(prev, curr);
+                if (diff === 1) {
+                    run += 1;
+                    longest = Math.max(longest, run);
+                } else {
+                    run = 1;
+                }
+            }
+
+            const lastDate = uniqueDates[uniqueDates.length - 1];
+            const yesterday = shiftDateStr(today, -1);
+            let current = 0;
+
+            if (lastDate === today || lastDate === yesterday) {
+                current = 1;
+                for (let i = uniqueDates.length - 1; i > 0; i--) {
+                    const newer = dateFromStr(uniqueDates[i]);
+                    const older = dateFromStr(uniqueDates[i - 1]);
+                    if (calendarDayDiff(older, newer) === 1) current += 1;
+                    else break;
+                }
+            }
+
+            return { current, lastDate, longest };
+        }
+
+        function normalizeData(raw) {
+            const source = isPlainObject(raw) ? raw : {};
+            const checkins = Array.isArray(source.checkins)
+                ? source.checkins.slice(0, MAX_CHECKINS).map((item, index) => validateCheckin(item, index)).filter(Boolean)
+                : [];
+            const sorted = sortCheckins(ensureUniqueCheckinIds(checkins));
+            const meta = isPlainObject(source.meta) ? source.meta : {};
+
+            return {
+                version: DATA_VERSION,
+                checkins: sorted,
+                streak: calculateStreak(sorted),
+                meta: {
+                    lastBackupReminderAt: Number.isInteger(meta.lastBackupReminderAt) && meta.lastBackupReminderAt >= 0
+                        ? meta.lastBackupReminderAt
+                        : 0
+                }
+            };
+        }
+
+        function emptyData() {
+            return {
+                version: DATA_VERSION,
+                checkins: [],
+                streak: { current: 0, lastDate: null, longest: 0 },
+                meta: { lastBackupReminderAt: 0 }
+            };
+        }
 
         function load() {
             try {
-                const r = localStorage.getItem(STORAGE_KEY);
-                if (r) return JSON.parse(r);
-            } catch (e) {}
-            return { checkins: [], streak: { current: 0, lastDate: null, longest: 0 } };
+                const raw = localStorage.getItem(STORAGE_KEY);
+                lastStoredJSON = raw;
+                if (raw) return normalizeData(JSON.parse(raw));
+            } catch (e) {
+                console.error('Could not load Sanctuary Check In data:', e);
+            }
+            return emptyData();
+        }
+
+        function readStoredData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw === lastStoredJSON) return D;
+                const latest = raw ? normalizeData(JSON.parse(raw)) : emptyData();
+                lastStoredJSON = raw;
+                return latest;
+            } catch (e) {
+                console.warn('Could not read latest Sanctuary Check In data:', e);
+                return null;
+            }
+        }
+
+        function syncDataFromStorage() {
+            const latest = readStoredData();
+            if (latest) D = latest;
+            return Boolean(latest);
         }
 
         function save() {
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(D)); } catch (e) {}
+            try {
+                D.version = DATA_VERSION;
+                const serialized = JSON.stringify(D);
+                localStorage.setItem(STORAGE_KEY, serialized);
+                lastStoredJSON = serialized;
+                return true;
+            } catch (e) {
+                console.error('Could not save Sanctuary Check In data:', e);
+                return false;
+            }
         }
 
-        // ─── LOCAL DATE / TIME HELPERS ───────────────────────────────
+        function refreshDerivedData() {
+            D.checkins = sortCheckins(D.checkins);
+            D.streak = calculateStreak(D.checkins);
+        }
+
+        // ─── UNFINISHED CHECK-IN RECOVERY ──────────────────────────
+        function emptyPending() {
+            return {
+                id: null,
+                before: null,
+                after: null,
+                song: '',
+                touch: [],
+                comment: '',
+                step: 'before',
+                startedAt: null
+            };
+        }
+
+        function normalizePending(raw) {
+            if (!isPlainObject(raw)) return emptyPending();
+            let touch = Array.isArray(raw.touch)
+                ? raw.touch.filter(v => TOUCH_OPTIONS.has(v))
+                : [];
+            touch = touch.includes('All of the above') ? ['All of the above'] : [...new Set(touch)].slice(0, 3);
+            const startedAt = typeof raw.startedAt === 'string' && Number.isFinite(Date.parse(raw.startedAt))
+                ? new Date(raw.startedAt).toISOString()
+                : null;
+            return {
+                id: typeof raw.id === 'string' && raw.id
+                    ? raw.id.slice(0, 100)
+                    : (startedAt ? `draft-${startedAt}`.slice(0, 100) : null),
+                before: isValidScore(raw.before) ? raw.before : null,
+                after: isValidScore(raw.after) ? raw.after : null,
+                song: normalizeString(raw.song, 300),
+                touch,
+                comment: normalizeString(raw.comment, 5000),
+                step: ['before', 'after', 'notes'].includes(raw.step) ? raw.step : 'before',
+                startedAt
+            };
+        }
+
+        function loadPending() {
+            try {
+                const raw = localStorage.getItem(PENDING_KEY);
+                lastPendingJSON = raw;
+                if (raw) return normalizePending(JSON.parse(raw));
+            } catch (e) {
+                console.warn('Could not load unfinished check-in:', e);
+            }
+            return emptyPending();
+        }
+
+        function savePending() {
+            if (pendingSaveTimer) {
+                clearTimeout(pendingSaveTimer);
+                pendingSaveTimer = null;
+            }
+            try {
+                if (!pending.startedAt) return clearPending();
+                const serialized = JSON.stringify(pending);
+                if (serialized === lastPendingJSON) return true;
+                localStorage.setItem(PENDING_KEY, serialized);
+                lastPendingJSON = serialized;
+                return true;
+            } catch (e) {
+                console.warn('Could not save unfinished check-in:', e);
+                return false;
+            }
+        }
+
+        function clearPending() {
+            if (pendingSaveTimer) {
+                clearTimeout(pendingSaveTimer);
+                pendingSaveTimer = null;
+            }
+            pending = emptyPending();
+            lastPendingJSON = null;
+            try {
+                localStorage.removeItem(PENDING_KEY);
+                return localStorage.getItem(PENDING_KEY) === null;
+            } catch (e) {
+                console.warn('Could not clear unfinished check-in:', e);
+                return false;
+            }
+        }
+
+        function queuePendingSave() {
+            if (pendingSaveTimer) clearTimeout(pendingSaveTimer);
+            pendingSaveTimer = setTimeout(() => {
+                pendingSaveTimer = null;
+                savePending();
+            }, 120);
+        }
+
+        function hasPending() {
+            return Boolean(pending.startedAt);
+        }
+
+        function escHTML(value) {
+            return String(value ?? '').replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[char]);
+        }
+
+        function csvCell(value) {
+            let s = String(value ?? '');
+            if (/^[\s\u200B\u200C\u200D\uFEFF]*[=+\-@]/.test(s)) s = "'" + s;
+            return '"' + s.replace(/"/g, '""') + '"';
+        }
+
+        // ─── LOCAL DATE / TIME HELPERS ──────────────────────────────
         function localDateStr() {
             const d = new Date();
             const y = d.getFullYear();
@@ -713,22 +2244,37 @@
             return y + '-' + m + '-' + day;
         }
 
-        function ts() { return localDateStr(); }
+        function ts() {
+            return localDateStr();
+        }
 
         function now() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
         }
 
-        function fmt(d) {
+        function dateFromStr(d) {
             const parts = d.split('-');
-            const dt = new Date(+parts[0], +parts[1] - 1, +parts[2]);
-            return dt.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            return new Date(+parts[0], +parts[1] - 1, +parts[2], 12, 0, 0, 0);
+        }
+
+        function calendarDayDiff(older, newer) {
+            const a = Date.UTC(older.getFullYear(), older.getMonth(), older.getDate());
+            const b = Date.UTC(newer.getFullYear(), newer.getMonth(), newer.getDate());
+            return Math.round((b - a) / 86400000);
+        }
+
+        function shiftDateStr(dateStr, amount) {
+            const d = dateFromStr(dateStr);
+            d.setDate(d.getDate() + amount);
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+
+        function fmt(d) {
+            return dateFromStr(d).toLocaleDateString([], { month: 'short', day: 'numeric' });
         }
 
         function fmtFull(d) {
-            const parts = d.split('-');
-            const dt = new Date(+parts[0], +parts[1] - 1, +parts[2]);
-            return dt.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+            return dateFromStr(d).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
         }
 
         function period() {
@@ -739,81 +2285,110 @@
         function weekRange() {
             const n = new Date();
             const day = n.getDay();
-            // Monday start
             const start = new Date(n);
             start.setDate(n.getDate() - ((day + 6) % 7));
             const end = new Date(start);
             end.setDate(end.getDate() + 6);
             return {
-                start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start
-                    .getDate()).padStart(2, '0'),
-                end: end.getFullYear() + '-' + String(end.getMonth() + 1).padStart(2, '0') + '-' + String(end.getDate())
-                    .padStart(2, '0')
+                start: start.getFullYear() + '-' + String(start.getMonth() + 1).padStart(2, '0') + '-' + String(start.getDate()).padStart(2, '0'),
+                end: end.getFullYear() + '-' + String(end.getMonth() + 1).padStart(2, '0') + '-' + String(end.getDate()).padStart(2, '0')
             };
         }
-        // ─────────────────────────────────────────────────────────────
 
-        function updStreak(today) {
-            const s = D.streak;
-            if (!s.lastDate) { s.current = 1;
-                s.longest = 1;
-                s.lastDate = today; return; }
-            if (s.lastDate === today) return;
-            const t1 = new Date(today + 'T00:00:00');
-            const t2 = new Date(s.lastDate + 'T00:00:00');
-            const diff = Math.round((t1 - t2) / (86400000));
-            if (diff === 1) { s.current++;
-                if (s.current > s.longest) s.longest = s.current; } else if (diff > 1) { s.current = 1; }
-            s.lastDate = today;
+        function formatChange(value) {
+            if (value === 0) return '0.0';
+            return (value > 0 ? '+' : '−') + Math.abs(value).toFixed(1);
         }
 
-        let screen = 'home';
-        let pending = { before: null };
-
+        // ─── RENDERING ──────────────────────────────────────────────
         function r(s, data) {
-            screen = s;
-            document.getElementById('app').innerHTML = renderScreen(s, data);
+            if (!app) return;
+
+            let nextScreen = VALID_SCREENS.has(s) ? s : 'home';
+            if (nextScreen === 'after' && !isValidScore(pending.before)) nextScreen = 'before';
+            if (nextScreen === 'notes') {
+                if (!isValidScore(pending.before)) nextScreen = 'before';
+                else if (!isValidScore(pending.after)) nextScreen = 'after';
+            }
+            if (nextScreen === 'result' && (
+                !isPlainObject(data) || !isValidScore(data.before) || !isValidScore(data.after) || !isValidDateStr(data.date)
+            )) {
+                nextScreen = 'home';
+                data = undefined;
+            }
+
+            currentScreen = nextScreen;
+            app.className = 'app screen-' + currentScreen;
+            document.body.classList.toggle('lock-scroll', LOCKED_SCREENS.has(currentScreen));
+            app.innerHTML = renderScreen(currentScreen, data);
+            app.classList.toggle('has-pending', currentScreen === 'home' && hasPending());
+
+            const textarea = app.querySelector('.comment-area');
+            if (textarea) autoResize(textarea);
         }
 
         function renderScreen(s, d) {
             switch (s) {
-                case 'home':
-                    return homeUI();
-                case 'before':
-                    return beforeUI();
-                case 'after':
-                    return afterUI();
-                case 'notes':
-                    return notesUI(d);
-                case 'result':
-                    return resultUI(d);
-                case 'dashboard':
-                    return dashUI();
-                case 'history':
-                    return histUI();
-                default:
-                    return homeUI();
+                case 'home': return homeUI();
+                case 'before': return beforeUI();
+                case 'after': return afterUI();
+                case 'notes': return notesUI();
+                case 'result': return resultUI(d);
+                case 'dashboard': return dashUI();
+                case 'history': return histUI();
+                default: return homeUI();
             }
         }
 
         function nav(active) {
-            return `<div class="bottom-nav">
-            <button class="nav-btn ${active==='home'?'active':''}" onclick="r('home')">🏠<span>Home</span></button>
-            <button class="nav-btn ${active==='checkin'?'active':''}" onclick="start()">✍️<span>Check-in</span></button>
-            <button class="nav-btn ${active==='dashboard'?'active':''}" onclick="r('dashboard')">📊<span>Progress</span></button>
-            <button class="nav-btn ${active==='history'?'active':''}" onclick="r('history')">📋<span>History</span></button>
-          </div>`;
+            const current = key => active === key ? 'page' : 'false';
+            return `<nav class="bottom-nav" aria-label="Primary navigation">
+            <button type="button" class="nav-btn ${active === 'home' ? 'active' : ''}" onclick="r('home')" aria-label="Home" aria-current="${current('home')}">🏠<span>Home</span></button>
+            <button type="button" class="nav-btn ${active === 'checkin' ? 'active' : ''}" onclick="start()" aria-label="Check-in" aria-current="${current('checkin')}">✍️<span>Check-in</span></button>
+            <button type="button" class="nav-btn ${active === 'dashboard' ? 'active' : ''}" onclick="r('dashboard')" aria-label="Progress" aria-current="${current('dashboard')}">📊<span>Progress</span></button>
+            <button type="button" class="nav-btn ${active === 'history' ? 'active' : ''}" onclick="r('history')" aria-label="History" aria-current="${current('history')}">📋<span>History</span></button>
+          </nav>`;
+        }
+
+        function backupReminderUI(returnScreen = 'home') {
+            const total = D.checkins.length;
+            const threshold = Math.floor(total / 25) * 25;
+            if (threshold < 25 || D.meta.lastBackupReminderAt >= threshold) return '';
+            return `<div class="weekly-card backup-reminder fade-in">
+                <div class="msg">💾 You have ${total} check-ins — this is a good time to make a backup.</div>
+                <div class="action-row">
+                    <button class="btn btn-outline btn-sm" onclick="backupData()">Backup now</button>
+                    <button class="btn btn-ghost btn-sm" onclick="dismissBackupReminder('${returnScreen}')">Not now</button>
+                </div>
+            </div>`;
+        }
+
+        function pendingUI() {
+            if (!hasPending()) return '';
+            const started = new Date(pending.startedAt);
+            const startedText = Number.isNaN(started.getTime()) ? '' : started.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return `<div class="weekly-card pending-reminder fade-in">
+                <div class="msg">✍️ You have an unfinished check-in${startedText ? ' from ' + escHTML(startedText) : ''}.</div>
+                <div class="action-row">
+                    <button class="btn btn-primary btn-sm" onclick="resumeCheckin()">Resume</button>
+                    <button class="btn btn-ghost btn-sm" type="button" onclick="startNewCheckin()">Start New Check-in</button>
+                </div>
+            </div>`;
         }
 
         function homeUI() {
+            if (!syncDataFromStorage()) refreshDerivedData();
             const today = ts();
             const s = D.streak;
-            const todayC = D.checkins.filter(c => c.date === today).length;
-            const emoji = period() === 'Morning' ? '🌅' : period() === 'Afternoon' ? '☀️' : '🌙';
+            const todayC = D.checkins.reduce((count, c) => count + (c.date === today ? 1 : 0), 0);
+            const dayPeriod = period();
+            const emoji = dayPeriod === 'Morning' ? '🌅' : dayPeriod === 'Afternoon' ? '☀️' : '🌙';
+            const hasDraft = hasPending();
+            const pendingBlock = hasDraft ? pendingUI() : '';
             return `
           <div class="brand-header fade-in">
             <div class="brand-logo">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
               </svg>
             </div>
@@ -823,314 +2398,741 @@
             </div>
             <div class="streak-pill">🔥 ${s.current} day streak</div>
           </div>
+          ${pendingBlock}
           <div class="card checkin-prompt fade-in">
-            <div class="time-badge">${emoji} ${period()} Check-in</div>
+            <div class="time-badge">${emoji} ${dayPeriod} Check-in</div>
             <h2>How are you feeling?</h2>
             <p>Rate your stress before and after your session.</p>
-            <button class="btn btn-primary" onclick="start()">Start Check-in</button>
-            ${todayC>0?`<p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted);">${todayC} check-in${todayC>1?'s':''} today so far${todayC<2?' — aim for at least 2':''}</p>`:''}
+            <button class="btn btn-primary" type="button" onclick="start()">${hasDraft ? 'Resume Check-in' : 'Start Check-in'}</button>
+            ${todayC > 0 ? `<p class="today-count">${todayC} check-in${todayC > 1 ? 's' : ''} today so far${todayC < 2 ? ' — aim for at least 2' : ''}</p>` : ''}
           </div>
           <div class="reminder-card fade-in"><p>💡 Building lasting calm takes time. Small, consistent sessions build the foundation. Showing up is the win.</p></div>
           ${nav('home')}`;
         }
 
-        function beforeUI() {
-            return `
-          <div class="top-nav fade-in">
-            <button class="btn btn-ghost btn-sm" onclick="r('home')">← Back</button>
-            <div class="spacer"></div><span class="step-indicator">Step 1 of 3</span>
-          </div>
-          <div class="card rating-section fade-in">
-            <div class="rating-label">How stressed / overwhelmed are you right now?</div>
-            <div class="rating-big" id="beforeVal">5</div>
-            <div class="slider-container">
-              <input type="range" min="1" max="10" value="5" id="beforeSlider" oninput="updRating('beforeVal',this.value)">
-            </div>
-            <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
-          </div>
-          <button class="btn btn-primary mt-8" onclick="doBefore()">Continue →</button>
-          ${nav('checkin')}`;
+        function stepNav(backAction, step) {
+            return `<div class="top-nav fade-in">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="${backAction}()">← Back</button>
+            <div class="spacer"></div><span class="step-indicator">Step ${step} of 3</span>
+          </div>`;
         }
 
-        function updRating(id, v) { document.getElementById(id).textContent = v; }
+        function ratingCard(field, label, value) {
+            const labelId = field + 'Label';
+            const valueId = field + 'Val';
+            const sliderId = field + 'Slider';
+            return `<div class="card rating-section fade-in">
+            <div class="rating-label" id="${labelId}">${label}</div>
+            <div class="rating-big" id="${valueId}">${value}</div>
+            <div class="slider-container">
+              <input type="range" min="0" max="10" value="${value}" id="${sliderId}" aria-labelledby="${labelId}" oninput="updatePendingRating('${field}','${valueId}',this.value)">
+            </div>
+            ${SCALE_LABELS}
+          </div>`;
+        }
+
+        function beforeUI() {
+            const value = isValidScore(pending.before) ? pending.before : 5;
+            return `${stepNav('goHomeFromCheckin', 1)}
+          ${ratingCard('before', 'How stressed / overwhelmed are you right now?', value)}
+          <button type="button" class="btn btn-primary mt-8" onclick="doBefore()">Continue →</button>
+          ${nav('checkin')}`;
+        }
 
         function afterUI() {
-            return `
-          <div class="top-nav fade-in">
-            <button class="btn btn-ghost btn-sm" onclick="r('before')">← Back</button>
-            <div class="spacer"></div><span class="step-indicator">Step 2 of 3</span>
-          </div>
-          <div class="card" style="text-align:center;margin-bottom:8px;background:var(--accent-soft);border:1px solid var(--accent-medium);">
-            <span style="font-size:0.78rem;color:var(--accent-glow);">Your stress before: <strong>${pending.before}/10</strong></span>
-          </div>
-          <div class="card rating-section fade-in">
-            <div class="rating-label">After your session — how stressed are you now?</div>
-            <div class="rating-big" id="afterVal">3</div>
-            <div class="slider-container">
-              <input type="range" min="1" max="10" value="3" id="afterSlider" oninput="updRating('afterVal',this.value)">
-            </div>
-            <div class="slider-labels"><span>😌 Calm</span><span>5</span><span>Stressed 😰</span></div>
-          </div>
-          <button class="btn btn-primary mt-8" onclick="doAfter()">Continue →</button>
+            if (!isValidScore(pending.before)) return beforeUI();
+            const value = isValidScore(pending.after) ? pending.after : pending.before;
+            return `${stepNav('backToBefore', 2)}
+          <div class="card before-summary"><span class="before-summary-text">Your stress before: <strong>${pending.before}/10</strong></span></div>
+          ${ratingCard('after', 'After your session — how stressed are you now?', value)}
+          <button type="button" class="btn btn-primary mt-8" onclick="doAfter()">Continue →</button>
           ${nav('checkin')}`;
         }
 
-        function notesUI(d) {
-            pending.after = d.after;
-            return `
-          <div class="top-nav fade-in">
-            <button class="btn btn-ghost btn-sm" onclick="r('after')">← Back</button>
-            <div class="spacer"></div><span class="step-indicator">Step 3 of 3</span>
-          </div>
+        function notesUI() {
+            if (!isValidScore(pending.before)) return beforeUI();
+            if (!isValidScore(pending.after)) return afterUI();
+            const selected = new Set(pending.touch);
+            const pillClass = value => selected.has(value) ? 'pill selected' : 'pill';
+            return `${stepNav('backToAfter', 3)}
           <div class="card fade-in">
-            <div class="card-title">Session Notes <span style="font-weight:400;text-transform:none;">(Optional, but highly beneficial)</span></div>
-            <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">What did you listen to?</label>
-            <input class="input-field" id="songInput" placeholder="e.g. I am Safe" style="margin-bottom:16px;">
-            <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Sanctuary Touch Techniques used</label>
+            <div class="card-title">Session Notes <span class="optional-note">(Optional, but highly beneficial)</span></div>
+            <label class="field-label" for="songInput">What did you listen to?</label>
+            <input class="input-field field-gap" id="songInput" maxlength="300" value="${escHTML(pending.song)}" placeholder="e.g. I am Safe" oninput="updatePendingText('song',this.value)">
+            <label class="field-label">Sanctuary Touch Techniques used</label>
             <div class="pill-group" id="touchGroup">
-              <button class="pill" data-touch="Hands" onclick="togglePill(this)">🙌 Hands</button>
-              <button class="pill" data-touch="Face" onclick="togglePill(this)">😌 Face</button>
-              <button class="pill" data-touch="Arms" onclick="togglePill(this)">💪 Arms</button>
-              <button class="pill" data-touch="All of the above" onclick="togglePill(this)">✨ All</button>
+              <button type="button" class="${pillClass('Hands')}" data-touch="Hands" aria-pressed="${selected.has('Hands')}" onclick="togglePill(this)">🙌 Hands</button>
+              <button type="button" class="${pillClass('Face')}" data-touch="Face" aria-pressed="${selected.has('Face')}" onclick="togglePill(this)">😌 Face</button>
+              <button type="button" class="${pillClass('Arms')}" data-touch="Arms" aria-pressed="${selected.has('Arms')}" onclick="togglePill(this)">💪 Arms</button>
+              <button type="button" class="${pillClass('All of the above')}" data-touch="All of the above" aria-pressed="${selected.has('All of the above')}" onclick="togglePill(this)">✨ All</button>
             </div>
-            <label style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:6px;">Any notes on how it felt?</label>
-            <textarea class="comment-area" id="commentInput" rows="3" placeholder="e.g. Felt tension release in my shoulders. Calmer than usual today." oninput="autoResize(this)"></textarea>
+            <label class="field-label" for="commentInput">Any notes on how it felt?</label>
+            <textarea class="comment-area" id="commentInput" rows="3" maxlength="5000" placeholder="e.g. Felt tension release in my shoulders. Calmer than usual today." oninput="updatePendingText('comment',this.value);autoResize(this)">${escHTML(pending.comment)}</textarea>
           </div>
-          <button class="btn btn-primary mt-8" onclick="doSave()">Save Check-in</button>
-          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="doSave()">Skip notes →</button>
+          <button type="button" class="btn btn-primary mt-8" onclick="doSave()">Save Check-in</button>
+          <button type="button" class="btn btn-ghost btn-sm skip-notes" onclick="doSave()">Skip notes →</button>
           ${nav('checkin')}`;
+        }
+
+        function updatePendingRating(field, id, value) {
+            const parsed = parseInt(value, 10);
+            if (!isValidScore(parsed)) return;
+            pending[field] = parsed;
+            const el = document.getElementById(id);
+            if (el) el.textContent = String(parsed);
+            queuePendingSave();
+        }
+
+        function updatePendingText(field, value) {
+            if (field === 'song') pending.song = normalizeString(value, 300);
+            if (field === 'comment') pending.comment = normalizeString(value, 5000);
+            queuePendingSave();
         }
 
         function autoResize(el) {
+            if (!el) return;
             el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
+            const max = Math.max(120, Math.min(window.innerHeight * 0.4, 320));
+            const next = Math.min(el.scrollHeight, max);
+            el.style.height = next + 'px';
+            el.style.overflowY = el.scrollHeight > max ? 'auto' : 'hidden';
         }
 
-        function togglePill(el) { el.classList.toggle('selected'); }
+        function togglePill(el) {
+            const group = document.getElementById('touchGroup');
+            if (!group) return;
+            const allPill = group.querySelector('[data-touch="All of the above"]');
+            const isAll = el.dataset.touch === 'All of the above';
+
+            if (isAll) {
+                const willSelect = !el.classList.contains('selected');
+                group.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+                if (willSelect) el.classList.add('selected');
+            } else {
+                if (allPill) allPill.classList.remove('selected');
+                el.classList.toggle('selected');
+            }
+
+            group.querySelectorAll('.pill').forEach(p => {
+                p.setAttribute('aria-pressed', String(p.classList.contains('selected')));
+            });
+            pending.touch = Array.from(group.querySelectorAll('.pill.selected')).map(p => p.dataset.touch);
+            savePending();
+        }
 
         function resultUI(d) {
+            if (!isPlainObject(d) || !isValidScore(d.before) || !isValidScore(d.after) || !isValidDateStr(d.date)) {
+                return homeUI();
+            }
             const { before, after, song, touch, comment } = d;
             const reduction = before - after;
-            const cls = reduction > 0 ? 'reduced' : 'neutral';
             let msg, emoji;
-            if (reduction >= 4) { msg = "Incredible! You reduced your stress by <strong>" + reduction + " points</strong>. That's a big shift — well done 😊";
-                emoji = '🎉'; } else if (reduction >= 2) { msg = "Well done! You reduced your stress by <strong>" + reduction + " points</strong> 😊";
-                emoji = '🙌'; } else if (reduction === 1) { msg = "Nice one! You reduced your stress by <strong>1 point</strong>. Every shift counts 😊";
-                emoji = '👍'; } else if (reduction === 0) { msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
-                emoji = '💪'; } else { msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
-                emoji = '❤️'; }
+            if (reduction >= 4) {
+                msg = "Incredible! You reduced your stress by <strong>" + reduction + " points</strong>. That's a big shift — well done 😊";
+                emoji = '🎉';
+            } else if (reduction >= 2) {
+                msg = "Well done! You reduced your stress by <strong>" + reduction + " points</strong> 😊";
+                emoji = '🙌';
+            } else if (reduction === 1) {
+                msg = "Nice one! You reduced your stress by <strong>1 point</strong>. Every shift counts 😊";
+                emoji = '👍';
+            } else if (reduction === 0) {
+                msg = "Some days the win is simply showing up. Perhaps another listen with soothing touch may help some more.";
+                emoji = '💪';
+            } else {
+                msg = "Your stress was higher after this session. That's useful information too — you can simply notice it without needing to fix anything right now.";
+                emoji = '❤️';
+            }
+
+            const delta = reduction > 0
+                ? `<div class="result-delta reduced">−${reduction} points</div>`
+                : reduction < 0
+                    ? `<div class="result-delta increased">+${Math.abs(reduction)} points</div>`
+                    : `<div class="result-delta neutral">No change</div>`;
 
             return `
           <div class="top-nav fade-in"><h1>Check-in Complete</h1><div class="spacer"></div></div>
           <div class="card result-card fade-in">
-            <div style="font-size:3rem;margin-bottom:8px;">${emoji}</div>
+            <div class="result-emoji">${emoji}</div>
             <div class="result-before-after">
               <div class="ra-col"><div class="ra-val">${before}</div><div class="ra-label">Stress Before</div></div>
               <div class="ra-arrow">→</div>
               <div class="ra-col"><div class="ra-val">${after}</div><div class="ra-label">Stress After</div></div>
             </div>
-            ${reduction > 0 ? `<div class="result-delta reduced">−${reduction} points</div>` : `<div class="result-delta neutral">—</div>`}
+            ${delta}
             <div class="result-msg">${msg}</div>
-            ${song ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;">🎵 ${song}</p>` : ''}
-            ${touch ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">🤲 ${touch}</p>` : ''}
-            ${comment ? `<p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">💬 ${comment}</p>` : ''}
-            <p style="font-size:0.7rem;color:var(--text-muted);margin-top:12px;">${fmtFull(ts())} · ${now()}</p>
+            ${song ? `<p class="result-detail result-song" title="${escHTML(song)}">🎵 ${escHTML(song)}</p>` : ''}
+            ${touch ? `<p class="result-detail result-touch" title="${escHTML(touch)}">🤲 ${escHTML(touch)}</p>` : ''}
+            ${comment ? `<p class="result-detail result-comment" title="${escHTML(comment)}">💬 ${escHTML(comment)}</p>` : ''}
+            <p class="result-time">${fmtFull(d.date)} · ${escHTML(d.time)}</p>
           </div>
-          <button class="btn btn-primary" onclick="r('dashboard')">See My Progress →</button>
-          <button class="btn btn-secondary mt-8" onclick="r('home')">Back to Home</button>
+          <button type="button" class="btn btn-primary" onclick="r('dashboard')">See My Progress →</button>
+          <button type="button" class="btn btn-secondary mt-8" onclick="r('home')">Back to Home</button>
           ${nav('home')}`;
         }
 
         function dashUI() {
+            if (!syncDataFromStorage()) refreshDerivedData();
             const today = ts();
             const s = D.streak;
             const all = D.checkins;
-            const todayC = all.filter(c => c.date === today).length;
             const wk = weekRange();
-            const wkC = all.filter(c => c.date >= wk.start && c.date <= wk.end);
-            const wkReductions = wkC.filter(c => c.before > c.after);
-            const avgR = wkC.length > 0 ? (wkC.reduce((a, c) => a + (c.before - c.after), 0) / wkC.length).toFixed(1) : '—';
-            const total = all.length;
 
-            let wkMsg = '';
-            if (wkC.length >= 14) wkMsg = '🎉 Amazing! You hit your 14 check-in target this week. Your nervous system thanks you!';
-            else if (wkC.length >= 10) wkMsg =
-                `💪 Great consistency! ${14-wkC.length} more check-ins to hit your weekly target.`;
-            else if (wkC.length >= 5) wkMsg =
-                `🌱 Building momentum — ${wkC.length} check-ins this week. Keep going, healing happens with repetition.`;
-            else if (wkC.length > 0) wkMsg = `🌱 Just getting started this week. Every check-in builds the habit.`;
-            else wkMsg = 'A new week begins. Aim for at least 2 check-ins a day — your nervous system will thank you.';
-
-            const last7 = [];
+            const last7Dates = [];
+            const daily = new Map();
             for (let i = 6; i >= 0; i--) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
-                const ds = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate())
-                    .padStart(2, '0');
-                const dc = all.filter(c => c.date === ds);
-                const avg = dc.length > 0 ? (dc.reduce((a, c) => a + (c.before - c.after), 0) / dc.length).toFixed(1) :
-                null;
-                last7.push({ date: ds, label: fmt(ds), avg, count: dc.length });
+                const ds = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                last7Dates.push(ds);
+                daily.set(ds, { sum: 0, count: 0 });
+            }
+
+            let todayC = 0;
+            let totalReductions = 0;
+            let weeklyChangeSum = 0;
+            let weeklyCount = 0;
+            const weeklyByDay = new Map();
+
+            for (const c of all) {
+                if (c.date === today) todayC += 1;
+                if (c.before > c.after) totalReductions += 1;
+
+                if (c.date >= wk.start && c.date <= wk.end && c.date <= today) {
+                    weeklyCount += 1;
+                    weeklyChangeSum += c.after - c.before;
+                    weeklyByDay.set(c.date, (weeklyByDay.get(c.date) || 0) + 1);
+                }
+
+                const day = daily.get(c.date);
+                if (day) {
+                    day.sum += c.after - c.before;
+                    day.count += 1;
+                }
+            }
+
+            const targetProgress = [...weeklyByDay.values()].reduce((sum, count) => sum + Math.min(count, 2), 0);
+            const avgChange = weeklyCount ? weeklyChangeSum / weeklyCount : null;
+            const total = all.length;
+            const last7 = last7Dates.map(date => {
+                const day = daily.get(date);
+                return {
+                    date,
+                    label: fmt(date),
+                    avg: day.count ? day.sum / day.count : null,
+                    count: day.count
+                };
+            });
+
+            let wkMsg = '';
+            if (targetProgress >= 14) {
+                wkMsg = '🎉 Amazing! You reached your 14 check-in consistency target this week. That consistency is worth celebrating.';
+            } else if (targetProgress >= 10) {
+                wkMsg = `💪 Great consistency! ${14 - targetProgress} more check-ins to reach this week's target.`;
+            } else if (targetProgress >= 5) {
+                wkMsg = `🌱 Building momentum — ${targetProgress} of 14 consistency check-ins this week. Keep giving the practice time to become familiar.`;
+            } else if (targetProgress > 0) {
+                wkMsg = `🌱 ${targetProgress} of 14 consistency check-ins this week. Up to 2 per day count toward this target.`;
+            } else {
+                wkMsg = 'A new week begins. If it suits you, aim for up to 2 check-ins a day and let consistency build gradually.';
             }
 
             return `
-          <div class="top-nav fade-in">
+          <div class="top-nav dashboard-nav fade-in">
             <h1>Your Progress</h1>
-            <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📤 Export</button>
-            <button class="btn btn-ghost btn-sm" onclick="backupData()">💾 Backup</button>
-            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
-            <input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="restoreData(this)">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="exportCSV()">📤 Export</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="backupData()">💾 Backup</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('restoreFile').click()">📥 Restore</button>
+            <input type="file" id="restoreFile" accept=".json,application/json" class="visually-hidden-file" onchange="restoreData(this)">
           </div>
           ${wkMsg ? `<div class="weekly-card fade-in"><div class="msg">${wkMsg}</div></div>` : ''}
+          ${backupReminderUI('dashboard')}
           <div class="stat-grid fade-in">
             <div class="stat-card"><div class="stat-value">${s.current}</div><div class="stat-label">Day Streak</div><div class="stat-sub">Best: ${s.longest}</div></div>
-            <div class="stat-card"><div class="stat-value">${todayC}</div><div class="stat-label">Today</div><div class="stat-sub">${todayC>=2?'✅ Target hit':'Min target: 2'}</div></div>
-            <div class="stat-card"><div class="stat-value">${avgR}</div><div class="stat-label">Avg Reduction</div><div class="stat-sub">This week · ${wkC.length} entries</div></div>
-            <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Check-ins</div><div class="stat-sub">${wkReductions.length} showed improvement</div></div>
+            <div class="stat-card"><div class="stat-value">${todayC}</div><div class="stat-label">Today</div><div class="stat-sub">${todayC >= 2 ? '✅ Target hit' : 'Min target: 2'}</div></div>
+            <div class="stat-card"><div class="stat-value">${avgChange === null ? '—' : formatChange(avgChange)}</div><div class="stat-label">Avg Change</div><div class="stat-sub">This week · ${weeklyCount} entries</div></div>
+            <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Check-ins</div><div class="stat-sub">${totalReductions} showed improvement</div></div>
           </div>
           <div class="card fade-in mt-12">
-            <div class="card-title">Last 7 Days — Avg Stress Reduction</div>
+            <div class="card-title">Last 7 Days — Avg Stress Change</div>
+            <div class="change-axis"><span>Higher stress ←</span><span>Lower stress →</span></div>
             <div class="chart-container">
-              ${last7.map(d=>{
-                if(d.avg===null) return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><span style="font-size:0.7rem;color:var(--text-muted);padding-left:8px;">No data</span></div></div>`;
-                const v=parseFloat(d.avg); const pct=Math.min(Math.abs(v)*10,100); const cls=v>=2?'good':v>=0?'ok':'low';
-                return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="chart-bar-wrap"><div class="chart-bar-fill ${cls}" style="width:${pct}%"><span class="chart-bar-num">${v>0?'−'+v:v}</span></div></div><span style="font-size:0.7rem;color:var(--text-muted);">${d.count}</span></div>`;
+              ${last7.map(d => {
+                if (d.avg === null) {
+                    return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="change-track"><div class="change-zero"></div><span class="change-no-data">No data</span></div><span class="change-value">—</span></div>`;
+                }
+                const v = d.avg;
+                const pct = Math.min(Math.abs(v) / 10 * 50, 50);
+                const bar = v === 0
+                    ? ''
+                    : `<div class="change-bar ${v < 0 ? 'good' : 'low'}" style="${v < 0 ? 'left:50%;' : 'right:50%;'}width:${pct}%;"></div>`;
+                return `<div class="chart-bar-row"><div class="chart-date">${d.label}</div><div class="change-track"><div class="change-zero"></div>${bar}</div><span class="change-value ${v < 0 ? 'good' : v > 0 ? 'low' : ''}">${formatChange(v)}</span><span class="change-count">${d.count}</span></div>`;
               }).join('')}
             </div>
+            <p class="chart-help">Negative numbers mean stress was lower after the session; positive numbers mean it was higher.</p>
           </div>
-          <div class="reminder-card fade-in"><p>💡 Building lasting calm is not linear. Some days you'll feel big shifts — other days, just showing up is the win. Trust the process and keep going.</p></div>
+          <div class="reminder-card fade-in"><p>💡 Progress is not always linear. Some days you'll notice a bigger shift; other days, showing up and noticing how you feel is enough.</p></div>
           ${nav('dashboard')}`;
         }
 
         function histUI() {
+            syncDataFromStorage();
             const list = [...D.checkins].reverse();
             return `
-          <div class="top-nav fade-in">
-            <button class="btn btn-ghost btn-sm" onclick="r('dashboard')">← Dashboard</button>
-            <div class="spacer"></div><h1 style="font-size:1.1rem;">History</h1>
+          <div class="top-nav history-nav fade-in">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="r('dashboard')">← Progress</button>
+            <h1>History</h1>
+            <span class="history-nav-balance" aria-hidden="true"></span>
           </div>
           <div class="scroll-area fade-in">
-            ${list.length===0?`<div class="empty-state"><div class="icon">📋</div><p>No check-ins yet.<br>Start your first one from the home screen.</p></div>`:''}
-            ${list.map((c,i)=>{
-              const red=c.before-c.after; const dCls=red>0?'pos':red<0?'neg':'zero';
-              const dSign=red>0?'−':red<0?'+':''; const prev=list[i-1];
-              const notes = [c.song, c.touch, c.comment].filter(Boolean).join(' · ');
-              return `${(!prev||c.date!==prev.date)?`<div style="font-size:0.72rem;color:var(--text-muted);font-weight:600;padding:8px 4px 4px;text-transform:uppercase;letter-spacing:0.5px;">${fmtFull(c.date)}</div>`:''}
+            ${list.length === 0 ? `<div class="empty-state"><div class="icon">📋</div><p>No check-ins yet.<br>Start your first one from the home screen.</p></div>` : ''}
+            ${list.map((c, i) => {
+                const red = c.before - c.after;
+                const dCls = red > 0 ? 'pos' : red < 0 ? 'neg' : 'zero';
+                const dSign = red > 0 ? '−' : red < 0 ? '+' : '';
+                const prev = list[i - 1];
+                const notes = [c.song, c.touch, c.comment].filter(Boolean).join(' · ');
+                const safeNotes = escHTML(notes);
+                return `${(!prev || c.date !== prev.date) ? `<div class="history-date-heading">${fmtFull(c.date)}</div>` : ''}
               <div class="history-item fade-in">
-                <div class="history-time">${c.time}</div>
+                <div class="history-time">${escHTML(c.time)}</div>
                 <div class="history-scores">
                   <span class="history-score">${c.before}</span><span class="history-arrow">→</span><span class="history-score">${c.after}</span>
-                  <span class="history-delta ${dCls}">${red!==0?dSign+Math.abs(red):'0'}</span>
+                  <span class="history-delta ${dCls}">${red !== 0 ? dSign + Math.abs(red) : '0'}</span>
                 </div>
-                ${notes?`<span class="history-notes" title="${esc(notes)}">${notes}</span>`:''}
+                ${notes ? `<span class="history-notes" title="${safeNotes}">${safeNotes}</span>` : ''}
               </div>`;
             }).join('')}
           </div>
           ${nav('history')}`;
         }
 
-        function esc(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
-
+        // ─── EXPORT / BACKUP / RESTORE ──────────────────────────────
         function exportCSV() {
-            const rows = D.checkins.map(c => [
-                c.date, c.time, c.period, c.before, c.after, c.before - c.after,
-                `"${(c.song||'').replace(/"/g,'""')}"`,
-                `"${(c.touch||'').replace(/"/g,'""')}"`,
-                `"${(c.comment||'').replace(/"/g,'""')}"`
-            ].join(','));
-            const csv = 'Date,Time,Period,Before,After,Reduction,Song,Sanctuary Touch Techniques,Notes\n' + rows.join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
+            try {
+                syncDataFromStorage();
+                const rows = D.checkins.map(c => [
+                    csvCell(c.date),
+                    csvCell(c.time),
+                    csvCell(c.period),
+                    c.before,
+                    c.after,
+                    c.before - c.after,
+                    csvCell(c.song),
+                    csvCell(c.touch),
+                    csvCell(c.comment),
+                    csvCell(c.createdAt)
+                ].join(','));
+                const csv = '\uFEFFDate,Time,Period,Before,After,Reduction,Song,Sanctuary Touch Techniques,Notes,Created At\n' + rows.join('\n');
+                downloadBlob(csv, 'text/csv;charset=utf-8', 'sanctuary-check-in-data.csv');
+                showToast('✅ CSV exported!');
+            } catch (e) {
+                console.error('CSV export failed:', e);
+                showToast('❌ CSV export failed.', true);
+            }
+        }
+
+        function downloadBlob(contents, type, filename) {
+            const blob = new Blob([contents], { type });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'sanctuary-check-in-data.csv';
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
             a.click();
-            URL.revokeObjectURL(url);
-            showToast('✅ CSV exported! Send this file to your coach.');
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
-        function showToast(msg) {
+        function showToast(msg, isError = false) {
+            document.querySelectorAll('.toast').forEach(existing => existing.remove());
             const t = document.createElement('div');
-            t.className = 'toast';
+            t.className = 'toast' + (isError ? ' error' : '');
             t.textContent = msg;
+            t.setAttribute('role', isError ? 'alert' : 'status');
+            t.setAttribute('aria-live', isError ? 'assertive' : 'polite');
             document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2100);
+            setTimeout(() => t.remove(), 2400);
+        }
+
+        function currentBackupThreshold() {
+            return Math.floor(D.checkins.length / 25) * 25;
+        }
+
+        function dismissBackupReminder(returnScreen = 'home') {
+            syncDataFromStorage();
+            const previous = D.meta.lastBackupReminderAt;
+            D.meta.lastBackupReminderAt = Math.max(previous, currentBackupThreshold());
+            if (!save()) {
+                D.meta.lastBackupReminderAt = previous;
+                showToast('❌ Could not save that preference.', true);
+                return;
+            }
+            r(returnScreen === 'dashboard' ? 'dashboard' : 'home');
         }
 
         function backupData() {
-            const dataClone = JSON.parse(JSON.stringify(D));
-            const blob = new Blob([JSON.stringify(dataClone, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'sanctuary-check-in-backup-' + ts() + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('💾 Backup saved! Keep this file safe.');
+            try {
+                if (!syncDataFromStorage()) refreshDerivedData();
+                D.version = DATA_VERSION;
+                const dataClone = JSON.parse(JSON.stringify(D));
+                downloadBlob(
+                    JSON.stringify(dataClone, null, 2),
+                    'application/json',
+                    'sanctuary-check-in-backup-' + ts() + '.json'
+                );
+                D.meta.lastBackupReminderAt = Math.max(D.meta.lastBackupReminderAt, currentBackupThreshold());
+                if (!save()) console.warn('Backup downloaded, but backup-reminder state could not be saved.');
+                showToast('💾 Backup saved! Keep this file safe.');
+            } catch (e) {
+                console.error('Backup failed:', e);
+                showToast('❌ Backup failed.', true);
+            }
+        }
+
+        function validateRestorePayload(raw) {
+            if (!isPlainObject(raw) || !Array.isArray(raw.checkins)) {
+                throw new Error('Invalid Sanctuary backup format');
+            }
+            if (Number.isInteger(raw.version) && raw.version > DATA_VERSION) {
+                throw new Error('This backup was created by a newer version of Sanctuary Check In');
+            }
+            if (raw.checkins.length > MAX_CHECKINS) {
+                throw new Error('Backup contains too many check-ins');
+            }
+
+            const invalidCount = raw.checkins.reduce((count, item, index) => count + (validateCheckin(item, index) ? 0 : 1), 0);
+            if (invalidCount > 0) {
+                throw new Error(invalidCount + ' invalid check-in' + (invalidCount === 1 ? '' : 's') + ' found');
+            }
+
+            return normalizeData(raw);
+        }
+
+        function showConfirmDialog({ title, message, confirmText = 'Confirm', danger = false }) {
+            if (typeof closeActiveConfirm === 'function') closeActiveConfirm(false);
+
+            return new Promise(resolve => {
+                const previouslyFocused = document.activeElement;
+                const backdrop = document.createElement('div');
+                backdrop.className = 'confirm-backdrop';
+
+                const panel = document.createElement('div');
+                panel.className = 'confirm-dialog';
+                panel.setAttribute('role', 'dialog');
+                panel.setAttribute('aria-modal', 'true');
+
+                const titleId = 'confirmTitle-' + makeId();
+                panel.setAttribute('aria-labelledby', titleId);
+
+                const heading = document.createElement('h2');
+                heading.id = titleId;
+                heading.textContent = title;
+
+                const body = document.createElement('p');
+                body.textContent = message;
+
+                const actions = document.createElement('div');
+                actions.className = 'confirm-actions';
+
+                const cancel = document.createElement('button');
+                cancel.type = 'button';
+                cancel.className = 'btn btn-secondary';
+                cancel.textContent = 'Cancel';
+
+                const confirmButton = document.createElement('button');
+                confirmButton.type = 'button';
+                confirmButton.className = 'btn btn-primary' + (danger ? ' btn-danger' : '');
+                confirmButton.textContent = confirmText;
+
+                actions.append(cancel, confirmButton);
+                panel.append(heading, body, actions);
+                backdrop.appendChild(panel);
+                document.body.appendChild(backdrop);
+
+                let settled = false;
+                const finish = value => {
+                    if (settled) return;
+                    settled = true;
+                    document.removeEventListener('keydown', onKeyDown);
+                    backdrop.remove();
+                    closeActiveConfirm = null;
+                    if (previouslyFocused && typeof previouslyFocused.focus === 'function' && previouslyFocused.isConnected) {
+                        previouslyFocused.focus();
+                    }
+                    resolve(value);
+                };
+                closeActiveConfirm = finish;
+
+                const onKeyDown = event => {
+                    if (event.key === 'Escape') {
+                        event.preventDefault();
+                        finish(false);
+                        return;
+                    }
+                    if (event.key !== 'Tab') return;
+                    const focusable = [cancel, confirmButton];
+                    const index = focusable.indexOf(document.activeElement);
+                    if (event.shiftKey && (index <= 0)) {
+                        event.preventDefault();
+                        confirmButton.focus();
+                    } else if (!event.shiftKey && index === focusable.length - 1) {
+                        event.preventDefault();
+                        cancel.focus();
+                    }
+                };
+
+                cancel.addEventListener('click', () => finish(false), { once: true });
+                confirmButton.addEventListener('click', () => finish(true), { once: true });
+                backdrop.addEventListener('click', event => {
+                    if (event.target === backdrop) finish(false);
+                });
+                document.addEventListener('keydown', onKeyDown);
+                requestAnimationFrame(() => confirmButton.focus());
+            });
         }
 
         function restoreData(input) {
-            const file = input.files[0];
+            const file = input.files && input.files[0];
             if (!file) return;
+
+            if (file.size > MAX_RESTORE_BYTES) {
+                showToast('❌ Backup file is too large.', true);
+                input.value = '';
+                return;
+            }
+
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const json = JSON.parse(e.target.result);
-                    if (!json.checkins || !json.streak) {
-                        throw new Error('Missing required fields (checkins, streak)');
+                    const restored = validateRestorePayload(json);
+                    const approved = await showConfirmDialog({
+                        title: 'Restore backup?',
+                        message: 'Restore ' + restored.checkins.length + ' check-ins with a ' + restored.streak.current +
+                            '-day current streak? This will replace all current saved check-ins.',
+                        confirmText: 'Restore',
+                        danger: true
+                    });
+                    if (!approved) return;
+
+                    const oldD = D;
+                    D = restored;
+                    if (!save()) {
+                        D = oldD;
+                        throw new Error('Browser storage is unavailable or full');
                     }
-                    if (!confirm(
-                            'Restore ' + json.checkins.length + ' check-ins with a ' + (json.streak.current || 0) +
-                            '-day streak? This will replace ALL current data.')) {
-                        input.value = '';
-                        return;
-                    }
-                    D = json;
-                    save();
+
+                    clearPending();
                     showToast('✅ Data restored! Reloading…');
-                    setTimeout(() => { location.reload(); }, 500);
+                    setTimeout(() => location.reload(), 700);
                 } catch (err) {
-                    showToast('❌ Invalid backup file: ' + err.message);
+                    console.error('Restore failed:', err);
+                    showToast('❌ Invalid backup file: ' + err.message, true);
+                } finally {
                     input.value = '';
                 }
             };
+            reader.onerror = function() {
+                showToast('❌ Could not read backup file.', true);
+                input.value = '';
+            };
             reader.readAsText(file);
-            input.value = '';
         }
 
-        function start() { pending = { before: null };
-            r('before'); }
+        // ─── CHECK-IN FLOW ──────────────────────────────────────────
+        function start() {
+            if (hasPending()) {
+                resumeCheckin();
+                return;
+            }
+            startFresh();
+        }
 
-        function doBefore() { pending.before = parseInt(document.getElementById('beforeSlider').value);
-            r('after'); }
+        function startFresh() {
+            isSaving = false;
+            pending = emptyPending();
+            pending.id = makeId();
+            pending.before = 5;
+            pending.step = 'before';
+            pending.startedAt = new Date().toISOString();
+            if (!savePending()) {
+                console.warn('Unfinished-check-in recovery is unavailable in this browser session.');
+            }
+            r('before');
+        }
 
-        function doAfter() { const a = parseInt(document.getElementById('afterSlider').value);
-            r('notes', { after: a }); }
+        function startNewCheckin() {
+            clearPending();
+            startFresh();
+        }
+
+        function resumeCheckin() {
+            if (!hasPending()) {
+                startFresh();
+                return;
+            }
+
+            if (pending.step === 'before') {
+                r('before');
+                return;
+            }
+
+            if (pending.step === 'after') {
+                if (!isValidScore(pending.before)) {
+                    pending.step = 'before';
+                    savePending();
+                    r('before');
+                    return;
+                }
+                r('after');
+                return;
+            }
+
+            if (pending.step === 'notes') {
+                if (!isValidScore(pending.before)) {
+                    pending.step = 'before';
+                    savePending();
+                    r('before');
+                    return;
+                }
+                if (!isValidScore(pending.after)) {
+                    pending.step = 'after';
+                    savePending();
+                    r('after');
+                    return;
+                }
+                r('notes');
+                return;
+            }
+
+            pending.step = 'before';
+            savePending();
+            r('before');
+        }
+
+        function goHomeFromCheckin() {
+            savePending();
+            r('home');
+        }
+
+        function backToBefore() {
+            pending.step = 'before';
+            savePending();
+            r('before');
+        }
+
+        function backToAfter() {
+            pending.step = 'after';
+            savePending();
+            r('after');
+        }
+
+        function doBefore() {
+            const slider = document.getElementById('beforeSlider');
+            if (!slider) return;
+            const value = parseInt(slider.value, 10);
+            if (!isValidScore(value)) return;
+            pending.before = value;
+            pending.step = 'after';
+            savePending();
+            r('after');
+        }
+
+        function doAfter() {
+            const slider = document.getElementById('afterSlider');
+            if (!slider) return;
+            const value = parseInt(slider.value, 10);
+            if (!isValidScore(value)) return;
+            pending.after = value;
+            pending.step = 'notes';
+            savePending();
+            r('notes');
+        }
+
+        function captureNotes() {
+            const songEl = document.getElementById('songInput');
+            const commentEl = document.getElementById('commentInput');
+            const group = document.getElementById('touchGroup');
+            if (songEl) pending.song = normalizeString(songEl.value.trim(), 300);
+            if (commentEl) pending.comment = normalizeString(commentEl.value.trim(), 5000);
+            if (group) pending.touch = Array.from(group.querySelectorAll('.pill.selected')).map(p => p.dataset.touch);
+            savePending();
+        }
 
         function doSave() {
-            const song = (document.getElementById('songInput')?.value || '').trim();
-            const touchPills = document.querySelectorAll('#touchGroup .pill.selected');
-            const touch = Array.from(touchPills).map(p => p.dataset.touch).join(', ');
-            const comment = (document.getElementById('commentInput')?.value || '').trim();
-            const after = pending.after;
+            if (isSaving) return;
+            captureNotes();
+            if (!isValidScore(pending.before) || !isValidScore(pending.after)) {
+                showToast('❌ Please complete both stress ratings first.', true);
+                return;
+            }
 
+            isSaving = true;
+            // Re-read the saved dataset immediately before writing so another open tab cannot
+            // accidentally be overwritten by this tab's older in-memory copy.
+            syncDataFromStorage();
+
+            const created = new Date();
             const entry = {
-                id: Date.now().toString(),
+                id: pending.id || makeId(),
+                createdAt: created.toISOString(),
                 date: ts(),
                 time: now(),
                 period: period(),
                 before: pending.before,
-                after: after,
-                song,
-                touch,
-                comment
+                after: pending.after,
+                song: normalizeString(pending.song.trim(), 300),
+                touch: [...new Set(pending.touch)].join(', '),
+                comment: normalizeString(pending.comment.trim(), 5000)
             };
 
+            const existing = D.checkins.find(c => c.id === entry.id);
+            if (existing) {
+                clearPending();
+                isSaving = false;
+                r('result', { ...existing });
+                return;
+            }
+
             D.checkins.push(entry);
-            updStreak(ts());
-            save();
+            refreshDerivedData();
+
+            if (!save()) {
+                D.checkins = D.checkins.filter(c => c.id !== entry.id);
+                refreshDerivedData();
+                isSaving = false;
+                showToast('❌ This check-in could not be saved. Please make a backup and check browser storage.', true);
+                return;
+            }
+
+            const cleared = clearPending();
+            isSaving = false;
             r('result', { ...entry });
+            if (!cleared) {
+                showToast('⚠️ Check-in saved, but the unfinished draft could not be cleared.', true);
+            }
         }
+
+        window.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && hasPending()) savePending();
+        });
+
+        window.addEventListener('pagehide', () => {
+            if (hasPending()) savePending();
+        });
+
+        window.addEventListener('storage', event => {
+            if (event.key === STORAGE_KEY) {
+                const latest = readStoredData();
+                if (latest) D = latest;
+                if (LIVE_DATA_SCREENS.has(currentScreen)) r(currentScreen);
+            } else if (event.key === PENDING_KEY && currentScreen === 'home') {
+                pending = loadPending();
+                r('home');
+            }
+        });
 
         r('home');
     </script>
